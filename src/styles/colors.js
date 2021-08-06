@@ -1,0 +1,7 @@
+export const PRIMARY_COLOR = "#093028"
+export const DARK_COLOR = "#343434"
+export const WHITE_COLOR = "#FFFFFF"
+// export const GREY_COLOR = "#616161"
+export const YELLOW_COLOR = "#FEC300"
+export const GREY_COLOR = "#87939F"
+export const RED_COLOR = "#F2000B"
