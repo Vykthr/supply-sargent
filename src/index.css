@@ -99,6 +99,8 @@ header nav ul li a{
     font-family: 'Montserrat', sans-serif;
     font-size: 60pt;
     font-weight: 800;
+    line-height: 80px;
+    margin: 1rem 0 2rem;
 }
 .home p {
     color: #FFF;

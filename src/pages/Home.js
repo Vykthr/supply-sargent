@@ -18,7 +18,7 @@ const Home = ({ user }) => {
                     </Grid>
                     <Grid item xs={12} md={6} >
                         <div className="d-flex-column justify-center" style={{ height: '100%' }}>
-                            <p style={{ fontWeight: 600, fontSize: '35pt' }}>Welcome to</p>
+                            <p style={{ fontWeight: 600, fontSize: '30pt' }}>Welcome to</p>
                             <h1 className="title">
                                 Supply <br/> Sargent
                             </h1>
@@ -28,7 +28,7 @@ const Home = ({ user }) => {
                         </div>
                     </Grid>
                 </Grid>
-                <p style={{ textAlign: 'center', fontWeight: 900, fontSize: '18pt' }}>Connecting Agri needs</p>
+                <p style={{ textAlign: 'center', fontWeight: 900, fontSize: '18pt', marginTop: '1rem' }}>Connecting Agri needs</p>
             </div>
         </div>
     )
