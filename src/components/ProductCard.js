@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux';
 
 const ProductCard = ({ product, general, addToCart, user }) => {
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
+    const isTab = useMediaQuery({ query: '(max-width: 1200px)' })
     const [ cartList, setCartList ] = useState(user.cartList)
     const [ quantity, setCartQuantity ] = useState(0)
 
@@ -63,14 +64,14 @@ const ProductCard = ({ product, general, addToCart, user }) => {
                     <p>Distance: <span>{product.quantity}</span></p>
 
                     <Grid container>
-                        <Grid item xs={12} md={6} style={{ padding: isPhone ? '.25rem' : '0 .5rem 0 0' }}>
+                        <Grid container item xs={12} md={6} style={{ padding: isPhone ? '.25rem' : '0 .5rem 0 0' }}>
                             {
                                 (cartList.map(({ id }) => id).indexOf(product.id) === -1) ?
                                 <Button onClick={() => addToCartList()} variant="contained" color="primary" fullWidth style={{ height: '100%' }} >
                                     Add to cart
                                 </Button>
                                 :
-                                <div style={{ display: 'flex', flexWrap: 'nowrap' }}>
+                                <div className="cart-add-btns">
                                     <IconButton><Remove /></IconButton>
                                     <span>{quantity}</span>
                                     <IconButton><Add /></IconButton>

@@ -67,17 +67,24 @@ header nav ul li a{
 
 .home {
     background-image: url('./assets/images/bg.jpg');
-    height: 100vh;
+    min-height: 100vh;
     background-position: center;
     background-attachment: fixed;
     background-size: cover;
     background-repeat: no-repeat;
+    font-family: 'Montserrat', sans-serif;
 }
 .overlay {
     background-color: rgba(0, 0, 0, 0.5);
     width: 100%;
     height: 100%;
     align-items: center;
+}
+.home .overlay {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
 }
 .home-logo {
     display: block;
@@ -88,20 +95,29 @@ header nav ul li a{
 .home .title {
     color: #FFF;
     text-transform: uppercase;
-    margin-bottom: 1rem;
-    font-size: 45px;
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 60pt;
     font-weight: 800;
 }
 .home p {
     color: #FFF;
-    margin: .5rem 0 2rem;
+    margin: 0;
     font-size: 18px;
     line-height: 33px;
+    text-transform: uppercase;
 }
 .home button {
-    align-self: flex-end;
+    align-self: flex-start;
+    width: 50%;
 }
-
+button.home-btn.button {
+    color: #FFF;
+    background-color: red;
+    font-size: 16px;
+    min-width: 50%;
+    font-weight: 900;
+}
 .home .card {
     background-color: rgba(0, 0, 0, 0.7);
     width: 75%;
@@ -118,7 +134,12 @@ button.button {
     text-transform: capitalize;
 }
 
-
+.cart-add-btns {
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    width: 100%;
+}
 .product-card {
     border-radius: 10px;
     border: 1px solid #093028;
@@ -492,6 +513,15 @@ div.form-control {
 }
 
 @media(max-width: 950px) {
+    .home .title {
+        font-size: 50pt;
+        line-height: 70px;
+        margin-bottom: 1rem;
+    }
+    .home p:first-child {
+        font-size: 30px !important;
+        margin-bottom: 1rem;
+    }
     header nav img {
         width: 50px;
         height: 50px;
@@ -502,12 +532,9 @@ div.form-control {
     header nav {
         padding: 1rem 2rem;
     }
-    .home {
-        height: fit-content;
-    }
-    .home .overlay {
+    /* .home .overlay {
         padding: 5rem 2rem;
-    }
+    } */
     .home-logo {
         padding: 5rem 2rem;
 
@@ -529,6 +556,9 @@ div.form-control {
     }
     .product-card > div:last-child {
         padding: 1rem;
+    }
+    button.home-btn.button {
+        margin: 1rem auto 3rem;
     }
 
 }

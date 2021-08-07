@@ -6,18 +6,30 @@ import { Search, Person } from '@material-ui/icons'
 import { connect } from 'react-redux'
 import { addToCart } from '../redux/actions/user'
 import { bindActionCreators } from 'redux';
-
-const NewsFeed = ({ general,  }) => {
+import { fetchAll } from '../redux/actions/general'
+const NewsFeed = ({ general, fetchAll }) => {
     const [ categories, setCategories ] = useState([])
     const [ categoriesHeight, setCategoriesHeight ] = useState('200px')
     const [ products, setProducts ] = useState(general.products)
 
     useEffect(() => {
+        updateAll();
+    }, [general])
+
+    const updateAll = () => {
         if(general.utilities?.hasOwnProperty('categories')) {
             setCategories(general.utilities.categories)
         }
         setProducts(general.products)
-    }, [general])
+    }
+
+    const init = async () => {
+        await fetchAll();
+    }
+
+    useEffect(() => {
+        init();
+    }, [])
     
     
     return (
@@ -145,6 +157,6 @@ const NewsFeed = ({ general,  }) => {
 const mapStateToProps = ({ general }) => ({ general })
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({  }, dispatch)
+    return bindActionCreators({ fetchAll }, dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(NewsFeed)

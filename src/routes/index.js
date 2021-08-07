@@ -56,7 +56,7 @@ const Routes = ({ user, logoutUser, updateProfile, fetchAll }) => {
       <Route
         {...rest}
         render={(props) =>
-          authenticated ? <Component {...props} /> : <Redirect to="/login" />
+          authenticated ? <Component {...props} /> : <Redirect to="/" />
         }
         exact={exact}
       />
