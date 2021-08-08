@@ -3,8 +3,6 @@ import { Grid, Button, IconButton } from '@material-ui/core'
 import { useMediaQuery } from 'react-responsive'
 import { ThumbUpAlt, Grade, PersonAdd, Remove, Add } from '@material-ui/icons'
 import { connect } from 'react-redux'
-import { addToCart } from '../redux/actions/user'
-import { bindActionCreators } from 'redux';
 
 const ProductCard = ({ product, general, addToCart, user }) => {
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
@@ -12,10 +10,9 @@ const ProductCard = ({ product, general, addToCart, user }) => {
     const [ cartList, setCartList ] = useState(user.cartList)
     const [ quantity, setCartQuantity ] = useState(0)
 
-    const addToCartList = async () => {
+    const addToCartList = async (remove = false) => {
         let newCart = [ ...cartList ]
         const index = newCart.map(({ id }) => id).indexOf(product.id)
-        console.log(index)
         if(index > -1) {
             newCart[index].quantity += 1;
         } else {
@@ -28,12 +25,10 @@ const ProductCard = ({ product, general, addToCart, user }) => {
         setCartList(user.cartList)
     }, [user])
 
-    useEffect(() => {
+    const getQuantity = () => {
         const prod = cartList.find(({ id }) => product.id === id)
-        if(prod) {
-            setCartQuantity(prod.quantity)
-        }
-    }, [cartList])
+        return prod?.quantity || 0
+    }
 
     return (
         <>
@@ -61,7 +56,7 @@ const ProductCard = ({ product, general, addToCart, user }) => {
                     <p>Condition: <span>{product.condition}</span></p>
                     <p>Location: <span>{product.location}</span></p>
                     <p>Availability: <span>{product.availability}</span></p>
-                    <p>Distance: <span>{product.quantity}</span></p>
+                    <p>Distance: <span></span></p>
 
                     <Grid container>
                         <Grid container item xs={12} md={6} style={{ padding: isPhone ? '.25rem' : '0 .5rem 0 0' }}>
@@ -73,8 +68,8 @@ const ProductCard = ({ product, general, addToCart, user }) => {
                                 :
                                 <div className="cart-add-btns">
                                     <IconButton><Remove /></IconButton>
-                                    <span>{quantity}</span>
-                                    <IconButton><Add /></IconButton>
+                                    <span>{getQuantity()}</span>
+                                    <IconButton onClick={() => addToCartList()}><Add /></IconButton>
                                 </div>
 }
                         </Grid>
@@ -90,7 +85,4 @@ const ProductCard = ({ product, general, addToCart, user }) => {
 
 const mapStateToProps = ({ general, user }) => ({ general, user })
 
-const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ addToCart }, dispatch)
-}
-export default connect(mapStateToProps, mapDispatchToProps)(ProductCard)
+export default connect(mapStateToProps, null)(ProductCard)

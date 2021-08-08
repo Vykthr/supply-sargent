@@ -13,7 +13,7 @@ const Products = ({ navigate, user, setProduct, general }) => {
     const [ products, setProducts ] = useState(general.products)
 
     const upload = () => {
-        if(currentPermits.filter((permit) => moment(new Date(permit.endDate)).diff(new Date(), 'days') > -1 )) {
+        if(currentPermits.filter((permit) => moment(new Date(permit.endDate)).diff(new Date(), 'days') > -1 ) || userDetails?.admin) {
             setProduct({
                 name: '',
                 value: '',

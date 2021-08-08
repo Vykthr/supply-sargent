@@ -4,17 +4,18 @@ import PageContainer from '../components/PageContainer'
 import ProductCard from '../components/ProductCard'
 import { Search, Person } from '@material-ui/icons'
 import { connect } from 'react-redux'
-import { addToCart } from '../redux/actions/user'
 import { bindActionCreators } from 'redux';
-import { fetchAll } from '../redux/actions/general'
-const NewsFeed = ({ general, fetchAll }) => {
+import { fetchAll } from '../redux/actions/general';
+import { addToCart } from '../redux/actions/user';
+
+const NewsFeed = ({ general, fetchAll, addToCart }) => {
     const [ categories, setCategories ] = useState([])
     const [ categoriesHeight, setCategoriesHeight ] = useState('200px')
     const [ products, setProducts ] = useState(general.products)
 
     useEffect(() => {
         updateAll();
-    }, [general])
+    }, [])
 
     const updateAll = () => {
         if(general.utilities?.hasOwnProperty('categories')) {
@@ -110,7 +111,7 @@ const NewsFeed = ({ general, fetchAll }) => {
                 <Grid item xs={12} md={9} lg={8}>
                     {
                         products.map((product, key) => (
-                            <ProductCard key={key} product={product} />
+                            <ProductCard addToCart={addToCart} key={key} product={product} />
                         ))
                     }
                 </Grid>
@@ -157,6 +158,6 @@ const NewsFeed = ({ general, fetchAll }) => {
 const mapStateToProps = ({ general }) => ({ general })
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ fetchAll }, dispatch)
+    return bindActionCreators({ fetchAll, addToCart }, dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(NewsFeed)

@@ -20,7 +20,6 @@ const Permits = ({ user, updateProfile, general }) => {
     useEffect(() => {
         setUserDetails(user.userData)
         if(user.userData?.currentPermits) setCurrentPermits(user.userData.currentPermits)
-        console.log(currentPermits)
     }, [user])
 
     useEffect(() => {
@@ -28,7 +27,7 @@ const Permits = ({ user, updateProfile, general }) => {
     }, [general])
 
     const permits = [
-        { id: 1, name: 'content creator', price: 4.99, categories: categories.filter(({ permitId }) => permitId == 1 ) },
+        { id: 1, name: 'content creator', price: 1.99, categories: categories.filter(({ permitId }) => permitId == 1 ) },
         { id: 2, name: 'seedling', price: 5.99, categories: categories.filter(({ permitId }) => permitId == 2 ) },
         { id: 3, name: 'professional', price: 7.99, categories: categories.filter(({ permitId }) => permitId == 3 ) },
         { 
@@ -85,7 +84,7 @@ const Permits = ({ user, updateProfile, general }) => {
                 setAlertConfig({
                     error: true,
                     header: 'Insufficient Balance', 
-                    message: 'Kindly visit the nearest supermarket, mini mart or any partnering business to purchase vouchers',
+                    message: 'Kindly visit your nearest supply sargent agent to purchase vouchers',
                     btn1Text: 'Purchase Now',
                     btn2Text: 'Cancel',
                     btn1Action: () => { history.push('/profile/wallet') }
@@ -102,7 +101,6 @@ const Permits = ({ user, updateProfile, general }) => {
             setUpdating(-1)
         }
     }
-
     
     return (
         <>

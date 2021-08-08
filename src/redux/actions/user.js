@@ -1,12 +1,12 @@
 import { USER_LOGIN, USER_LOGOUT, USER_UPDATE, UPDATE_CART } from "./constants";
-import user from "../api/user";
+import userApi from "../api/user";
 
 export const loginUser = (payload, checked) => {
   return async (dispatch) => {
     try {
-      const response = await user.loginUser(payload);
+      const response = await userApi.loginUser(payload);
       if(response) {
-        const userData = await (await user.getUserData(payload.email)).data();
+        const userData = await (await userApi.getUserData(payload.email)).data();
         localStorage.setItem("supply-sargent", JSON.stringify(userData));
         await dispatch({
           type: USER_LOGIN,
@@ -23,8 +23,8 @@ export const loginUser = (payload, checked) => {
 export const updateProfile = (email, payload = null) => {
   return async (dispatch) => {
     try {
-        if(payload) await user.updateProfile(email, payload);
-        const userData = await (await user.getUserData(email)).data();
+        if(payload) await userApi.updateProfile(email, payload);
+        const userData = await (await userApi.getUserData(email)).data();
         localStorage.setItem("supply-sargent", JSON.stringify(userData));
         await dispatch({
           type: USER_UPDATE,
@@ -55,7 +55,8 @@ export const logoutUser = () => {
   return async (dispatch) => {
     try {
         localStorage.removeItem("supply-sargent");
-        user.logoutUser();
+        window.location.href = '/'
+        userApi.logoutUser();
         await dispatch({
             type: USER_LOGOUT
         });
