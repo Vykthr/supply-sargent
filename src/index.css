@@ -600,17 +600,30 @@ div.form-control {
 }
 
 @media(max-width: 950px) {
-    .home .title {
-        font-size: 50pt;
-        line-height: 70px;
-        margin-bottom: 1rem;
+    .home-nav button {
+        display: none;
     }
-    .home p:first-child {
-        font-size: 30px !important;
-        margin-bottom: 1rem;
+    .home-nav > div:first-child {
+        flex-direction: column;
     }
-    .home p {
-        margin-bottom: 2rem;
+    .home-nav p {
+        margin: 1rem auto .5rem;
+        font-size: 30px;
+    }
+    .home-content h3 {
+        font-size: 35px;
+        line-height: 40px;
+    }
+    .home-content .card {
+        padding: 1.5rem 1rem;
+        font-size: 16px;
+    }
+    .home-footer {
+        position: relative;
+        padding: 1rem
+    }
+    .home-footer p {
+        font-size: 16px;
     }
     header nav img {
         width: 50px;
@@ -630,8 +643,7 @@ div.form-control {
 
     }
     .home .card {
-        background-color: rgba(0, 0, 0, 0.5);
-        width: 75%;
+        width: 80%;
         margin: 50px auto;
     
     }
