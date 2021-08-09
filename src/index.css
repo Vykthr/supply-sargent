@@ -80,6 +80,7 @@ header nav ul li a{
     height: 100%;
     align-items: center;
 }
+
 .home .overlay {
     display: flex;
     flex-direction: column;
@@ -131,6 +132,90 @@ button.home-btn.button {
     align-items: initial;
 
 }
+
+
+
+
+.home .home-nav {
+    position: sticky;
+    background-color: rgba(3, 24, 20, 0.8);
+    padding: 1rem 3rem;
+    font-family: 'Montserrat', sans-serif;
+}
+.home-nav img {
+    width: 100px;
+    height: 100px;
+    margin-right: 2rem;
+}
+.home-nav button {
+    background-color: #ffff01;
+    color: #093028;
+    font-weight: 900;
+    font-size: 25px;
+}
+.home-nav button:hover {
+    background-color: #ffff01;
+    color: #093028;
+}
+.home-nav p {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 40px;
+    margin: 0;
+    color: #FFF;
+}
+.home-nav p span {
+    font-weight: 900;
+}
+.home-content {
+    text-align: center;
+    margin: auto;
+}
+.home-content h3 {
+    color: #ffff01;
+    font-weight: 900;
+    font-size: 50px;
+    text-transform: uppercase;
+    line-height: 50px;
+    font-family: 'Montserrat', sans-serif;
+}
+.home-content .card {
+    margin: 1rem auto 2rem;
+    width: 55%;
+}
+.home-content p{
+    color: #fff;
+    font-size: 22px;
+    line-height: 28px;
+    text-transform: initial;
+}
+
+.home-content .home-btn.button {
+    color: #FFF;
+    background-color: red;
+    font-size: 20px;
+    font-weight: 900;
+    width: fit-content;
+    min-width: fit-content;
+}
+
+.home-footer {
+    background-color: rgba(3, 24, 20, 0.8);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+.home-footer p {
+    text-transform: inherit;
+}
+
+
+
+
+
 button.button {
     padding: 12px 45px;
     text-transform: capitalize;

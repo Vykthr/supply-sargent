@@ -106,9 +106,6 @@ const Login = ({ loginUser, logoutUser, user }) => {
         setShowConfirmPassword(false)
     }, [section])
 
-    useEffect(() => {
-        if(!user.authenticated) logoutUser()
-    }, [user])
 
     return (
         <Grid container style={{ minHeight: '100vh' }}>
