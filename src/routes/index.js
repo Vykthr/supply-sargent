@@ -72,8 +72,8 @@ const Routes = ({ user, logoutUser, updateProfile, fetchAll }) => {
         </Route>
         <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
+        <Route exact path="/news-feed" component={NewsFeed} />
         
-        <PrivateRoute exact path="/news-feed" component={NewsFeed} />
         <PrivateRoute exact path="/chat" component={ChatView} />
         <PrivateRoute exact path="/cart" component={Cart} />
         <PrivateRoute exact path="/messages" component={Messages} />

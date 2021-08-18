@@ -1,12 +1,23 @@
 import { Grid, Button } from '@material-ui/core'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom'
 import Logo from '../assets/images/whitelogo.png'
+import { fetchAll } from '../redux/actions/general';
+import { bindActionCreators } from 'redux';
 
-const Home = ({ user }) => {
+const Home = ({ user, fetchAll }) => {
     const history = useHistory()
 
+    
+    const init = async () => {
+        await fetchAll();
+    }
+
+    useEffect(() => {
+        init();
+    }, [])
+    
     return (
         <div className="home">
             <div container className="overlay" style={{ justifyContent: 'inherit' }}>
@@ -17,7 +28,7 @@ const Home = ({ user }) => {
                             <p>Welcome to <span>Supply sargent</span></p>
                         </Grid>
                         <Grid item md={2}>
-                            <Button onClick={() => user.userData ? history.push('/news-feed') : history.push('/login') } fullWidth color="primary" variant="contained" className="btn">Enter</Button>
+                            <Button onClick={() => history.push('/news-feed') } fullWidth color="primary" variant="contained" className="btn">Enter</Button>
                         </Grid>
                     </Grid> 
 
@@ -30,7 +41,7 @@ const Home = ({ user }) => {
                         </p>
 
 
-                        <Button variant="contained" className="home-btn button" onClick={() => user.userData ? history.push('/news-feed') : history.push('/login') }>SIGN UP/LOGIN</Button>
+                        <Button variant="contained" className="home-btn button" onClick={() => history.push('/login') }>SIGN UP/LOGIN</Button>
                     </Grid>
                     
                     <Grid item xs={12} className="home-footer">
@@ -45,4 +56,8 @@ const Home = ({ user }) => {
 
 const mapStateToProps = ({ user }) => ({ user })
 
-export default connect(mapStateToProps, null)(Home)
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({ fetchAll }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
