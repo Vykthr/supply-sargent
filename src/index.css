@@ -6,12 +6,12 @@ option, select {
 }
 body {
   margin: 0;
-  font-family: 'Mulish', sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 .MuiButton-root {
-    font-family: 'Mulish', sans-serif !important;
+    font-family: 'Montserrat', sans-serif !important;
 }
 .PrivateNotchedOutline-root-1.MuiOutlinedInput-notchedOutline {
     border-color: #093028 !important;
@@ -30,12 +30,11 @@ a {
     cursor: pointer;
 }
 code, .MuiTypography-body1  {
-    font-family: 'Mulish', sans-serif !important;
+    font-family: 'Montserrat', sans-serif !important;
 }
-
 header nav img {
-    width: 65px;
-    height: 65px;
+    width: 70px;
+    height: 70px;
 }
 header nav {
     padding: 1rem 3rem;
@@ -50,7 +49,8 @@ header nav ul li {
     list-style: none;
 }
 header nav ul li a{
-    color: white;
+    color: #000;
+    font-weight: 600;
     text-transform: capitalize;
 }
 
@@ -66,7 +66,7 @@ header nav ul li a{
 
 
 .home {
-    background-image: url('./assets/images/bg.jpg');
+    background-image: url('./assets/images/home-bg.png');
     min-height: 100vh;
     background-position: center;
     background-attachment: fixed;
@@ -79,138 +79,69 @@ header nav ul li a{
     width: 100%;
     height: 100%;
     align-items: center;
-}
-
-.home .overlay {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 100vh;
-}
-.home-logo {
-    display: block;
-    margin: auto;
-    width: 55%;
-}
-
-.home .title {
-    color: #FFF;
-    text-transform: uppercase;
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 60pt;
-    font-weight: 800;
-    line-height: 80px;
-    margin: 1rem 0 2rem;
-}
-.home p {
-    color: #FFF;
-    margin: 0;
-    font-size: 18px;
-    line-height: 33px;
-    text-transform: uppercase;
-}
-.home button {
-    align-self: flex-start;
-    width: 50%;
-}
-button.home-btn.button {
-    color: #FFF;
-    background-color: red;
-    font-size: 16px;
-    min-width: 50%;
-    font-weight: 900;
-}
-.home .card {
-    background-color: rgba(0, 0, 0, 0.7);
-    width: 75%;
-    margin-top: -1rem;
-    padding: 50px;
-    display: flex;
-    flex-direction: column;
-    border-radius: 10px;
-    align-items: initial;
-
+    position: fixed;
 }
 
 
-
-
-.home .home-nav {
-    position: sticky;
-    background-color: rgba(3, 24, 20, 0.8);
-    padding: 1rem 3rem;
-    font-family: 'Montserrat', sans-serif;
-}
-.home-nav img {
-    width: 100px;
-    height: 100px;
-    margin-right: 2rem;
-}
-.home-nav button {
-    background-color: #ffff01;
-    color: #093028;
-    font-weight: 900;
-    font-size: 25px;
-}
-.home-nav button:hover {
-    background-color: #ffff01;
-    color: #093028;
-}
-.home-nav p {
+.home-content p {
     text-transform: uppercase;
     font-weight: bold;
-    font-size: 40px;
+    font-size: 50px;
+    line-height: 50px;
     margin: 0;
     color: #FFF;
 }
-.home-nav p span {
+.home-content p span {
     font-weight: 900;
+    font-size: 70px;
+    line-height: 70px;
+    text-transform: uppercase;
+    display: block;
 }
 .home-content {
-    text-align: center;
     margin: auto;
 }
 .home-content h3 {
     color: #ffff01;
     font-weight: 900;
-    font-size: 50px;
+    font-size: 35px;
     text-transform: uppercase;
-    line-height: 50px;
+    line-height: 35px;
     font-family: 'Montserrat', sans-serif;
 }
 .home-content .card {
     margin: 1rem auto 2rem;
     width: 55%;
 }
-.home-content p{
+.home-content .right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    margin-bottom: 35px;
+}
+.home-content .right > span {
     color: #fff;
-    font-size: 22px;
-    line-height: 28px;
-    text-transform: initial;
 }
 
-.home-content .home-btn.button {
-    color: #FFF;
-    background-color: red;
-    font-size: 20px;
-    font-weight: 900;
+.home-content button, .home-content button:hover {
+    color: #000;
+    background-color: #ffff01;
+    font-size: 16px;
+    border-radius: 20px;
     width: fit-content;
-    min-width: fit-content;
+    padding: .5rem 2rem;
+    margin-bottom: 1rem;
 }
 
-.home-footer {
-    background-color: rgba(3, 24, 20, 0.8);
+.home-content {
     position: fixed;
     bottom: 0;
+    left: 0; right: 0;
     width: 100%;
-    text-align: center;
-    padding: 1rem 0;
+    padding: 0 2rem;
 }
 
-.home-footer p {
-    text-transform: inherit;
-}
 
 
 
@@ -600,15 +531,8 @@ div.form-control {
 }
 
 @media(max-width: 950px) {
-    .home-nav button {
-        display: none;
-    }
-    .home-nav > div:first-child {
-        flex-direction: column;
-    }
-    .home-nav p {
-        margin: 1rem auto .5rem;
-        font-size: 30px;
+    .home nav ul li a {
+        color: #fff;
     }
     .home-content h3 {
         font-size: 35px;
@@ -635,20 +559,29 @@ div.form-control {
     header nav {
         padding: 1rem 2rem;
     }
-    /* .home .overlay {
-        padding: 5rem 2rem;
-    } */
-    .home-logo {
-        padding: 5rem 2rem;
 
-    }
-    .home .card {
-        width: 80%;
-        margin: 50px auto;
-    
-    }
-    .home p, .home h1 {
+    .home p, .home h3, .home span {
         text-align: center;
+    }
+    .home-content p {
+        font-size: 35px;
+    }
+    .home-content p span {
+        font-size: 60px;
+        line-height: 60px;
+    }
+    .home-content h3 {
+        font-size: 25px;
+    }
+    .home-content {
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        min-height: 100vh;
+    }
+    .home .right {
+        justify-content: center;
+        align-items: center;
     }
     .MuiButton-startIcon {
         margin-right: 0 !important;

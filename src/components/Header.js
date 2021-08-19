@@ -14,11 +14,11 @@ const Header = ({ user }) => {
         setDrawer(!drawer)
     };
     const links = [
-        { label: 'news feed', url: '/news-feed'},
-        { label: 'messages', url: '/messages'},
-        { label: 'Your orders', url: '/orders'},
-        { label: 'my profile', url: '/profile'},
-        { label: 'my cart', url: '/cart', badge: cartList.length}
+        { label: 'Home', url: '/news-feed'},
+        { label: 'Newsfeed', url: '/messages'},
+        { label: 'Marketplace', url: '/orders'},
+        { label: 'my dashboard', url: '/profile'},
+        // { label: 'my cart', url: '/cart', badge: cartList.length}
     ]	
     
     useEffect(() => {
@@ -27,9 +27,9 @@ const Header = ({ user }) => {
     }, [user])
 // a	search	bar, and	'log	out.
     return (
-        <AppBar position="sticky">
+        <AppBar position="sticky" style={{ backgroundColor: 'transparent' }}>
             <Toolbar style={{ display: 'block' }}>
-                <nav style={{ backgroundColor: PRIMARY_COLOR }}>
+                <nav>
                     <Grid container>
                         <Grid item  className="d-flex align-center">
                             <Link to="/">

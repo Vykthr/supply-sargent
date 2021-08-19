@@ -3,11 +3,15 @@ import React, { useEffect } from 'react'
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom'
 import Logo from '../assets/images/whitelogo.png'
+import { ArrowForwardIosOutlined }  from '@material-ui/icons'
 import { fetchAll } from '../redux/actions/general';
 import { bindActionCreators } from 'redux';
+import PageContainer from '../components/PageContainer'
+import { useMediaQuery } from 'react-responsive'
 
 const Home = ({ user, fetchAll }) => {
     const history = useHistory()
+    const isTab = useMediaQuery({ query: '(max-width: 950px)' })
 
     
     const init = async () => {
@@ -20,36 +24,25 @@ const Home = ({ user, fetchAll }) => {
     
     return (
         <div className="home">
-            <div container className="overlay" style={{ justifyContent: 'inherit' }}>
-                <Grid container>
-                    <Grid item container xs={12} className="home-nav no-wrap d-flex align-center">
-                        <Grid item xs={12} md={10} className="d-flex align-center">
-                            <img src={Logo} />
-                            <p>Welcome to <span>Supply sargent</span></p>
-                        </Grid>
-                        <Grid item md={2}>
-                            <Button onClick={() => history.push('/news-feed') } fullWidth color="primary" variant="contained" className="btn">Enter</Button>
-                        </Grid>
-                    </Grid> 
-
-                    
-                    <Grid item xs={12} className="home-content">
-                        <h3>connect with<br/>farmers &amp; agri-businesses<br/>worldwide </h3>
-
-                        <p className="card">
-                            Supply sargent is an e-commerce platform which facilitates the connection between farmers, agri-businesses and their customers providing a unique, easy to use online marketplace.
+            { isTab && <div className="overlay"></div> }
+            <PageContainer>
+                <Grid container className="home-content">
+                    <Grid item md={6} sm={12}>
+                        <p>Welcome to
+                        <span>Supply <br/> Sargent</span>
                         </p>
 
-
-                        <Button variant="contained" className="home-btn button" onClick={() => history.push('/login') }>SIGN UP/LOGIN</Button>
+                        <h3>
+                            Connect with farmers <br/> &amp; agri-businesses <br/> worldwide
+                        </h3>
                     </Grid>
-                    
-                    <Grid item xs={12} className="home-footer">
-                        <p>Copyright &copy; {new Date().getFullYear() } Supply Sargent LLC - All Rights Reserved </p>
+                    <Grid item md={6} sm={12} className="right">
+                        <Button endIcon={<ArrowForwardIosOutlined />} >Learn More</Button>
+                        <span>Copyright © { new Date().getFullYear() } Supply Sargent LLC - All Rights Reserved</span>
                     </Grid>
                 </Grid>
-                {/* // <p style={{ textAlign: 'center', fontWeight: 900, fontSize: '18pt', marginTop: '1rem' }}>Connecting Agri needs</p> */}
-            </div>
+
+            </PageContainer>
         </div>
     )
 }
