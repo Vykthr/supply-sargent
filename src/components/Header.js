@@ -14,9 +14,9 @@ const Header = ({ user }) => {
         setDrawer(!drawer)
     };
     const links = [
-        { label: 'Home', url: '/news-feed'},
-        { label: 'Newsfeed', url: '/messages'},
-        { label: 'Marketplace', url: '/orders'},
+        { label: 'Home', url: '/'},
+        { label: 'Newsfeed', url: '/newsfeed'},
+        { label: 'Marketplace', url: '/marketplace'},
         { label: 'my dashboard', url: '/profile'},
         // { label: 'my cart', url: '/cart', badge: cartList.length}
     ]	

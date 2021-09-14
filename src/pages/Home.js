@@ -27,7 +27,7 @@ const Home = ({ user, fetchAll }) => {
             { isTab && <div className="overlay"></div> }
             <PageContainer>
                 <Grid container className="home-content">
-                    <Grid item md={6} sm={12}>
+                    <Grid item md={6} xs={12}>
                         <p>Welcome to
                         <span>Supply <br/> Sargent</span>
                         </p>
@@ -36,7 +36,7 @@ const Home = ({ user, fetchAll }) => {
                             Connect with farmers <br/> &amp; agri-businesses <br/> worldwide
                         </h3>
                     </Grid>
-                    <Grid item md={6} sm={12} className="right">
+                    <Grid item md={6} xs={12} className="right">
                         <Button endIcon={<ArrowForwardIosOutlined />} >Learn More</Button>
                         <span>Copyright © { new Date().getFullYear() } Supply Sargent LLC - All Rights Reserved</span>
                     </Grid>
