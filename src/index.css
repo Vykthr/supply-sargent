@@ -703,5 +703,18 @@ div.form-control {
     button.btn, a.btn {
         min-height: 45px;
     }
-
+    .news-card {
+        padding: .5rem 0;
+    }
+    .news-card p.views {
+        font-size: 16px;
+    }
+    .news-card p.views span {
+        display: block;
+    }
+    .news-card .actions button {
+        box-shadow: none;
+        height: 30px;
+        font-size: 10px;
+    }
 }

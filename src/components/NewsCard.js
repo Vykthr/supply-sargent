@@ -15,7 +15,7 @@ const NewsCard = ({ news, general, user }) => {
                     <Grid item>
                         <Avatar source={news.user?.image} />
                     </Grid>
-                    <Grid item xs={4} md={5}>
+                    <Grid item xs={8} md={5}>
                         <p className="name">{news.user?.name}</p>
                         <p className="email">{news.user?.email}</p>
                     </Grid>
