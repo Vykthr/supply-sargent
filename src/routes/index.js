@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route, useHistory, withRouter, Redirec
 import { connect } from "react-redux";
 import AOS from 'aos';
 import Home from '../pages/Home';
-import Login from "../pages/Login";
 import NewsFeed from '../pages/NewsFeed';
 import ChatView from '../pages/ChatView';
 import Messages from '../pages/Messages';
@@ -15,6 +14,12 @@ import Profile from '../pages/Profile';
 import Orders from '../pages/Orders';
 import { updateProfile } from '../redux/actions/user'
 import { fetchAll } from '../redux/actions/general'
+import MarketPlace from '../pages/MarketPlace';
+import BecomeAVendor from '../pages/BecomeAVendor';
+import PrimeOrders from '../pages/PrimeOrders';
+import Advertise from '../pages/Advertise';
+import BecomeAContentCreator from '../pages/BecomeAContentCreator';
+import Auth from '../pages/Auth';
 
 const ScrollToTop = () => {
   const history = useHistory();
@@ -71,8 +76,15 @@ const Routes = ({ user, logoutUser, updateProfile, fetchAll }) => {
           <Redirect to={`/`} />
         </Route>
         <Route exact path="/" component={Home} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/news-feed" component={NewsFeed} />
+        <Route exact path="/login" component={Auth} />
+        <Route exact path="/sign-up" component={Auth} />
+        <Route exact path="/forgot-password" component={Auth} />
+        <Route exact path="/newsfeed" component={NewsFeed} />
+        <Route exact path="/marketplace" component={MarketPlace} />
+        <Route exact path="/become-a-vendor" component={BecomeAVendor} />
+        <Route exact path="/become-a-content-creator" component={BecomeAContentCreator} />
+        <Route exact path="/prime-orders" component={PrimeOrders} />
+        <Route exact path="/advertise" component={Advertise} />
         
         <PrivateRoute exact path="/chat" component={ChatView} />
         <PrivateRoute exact path="/cart" component={Cart} />
@@ -80,6 +92,7 @@ const Routes = ({ user, logoutUser, updateProfile, fetchAll }) => {
         <PrivateRoute exact path="/profile/" component={Profile} />
         <PrivateRoute exact path="/profile/:section" component={Profile} />
         <PrivateRoute exact path="/orders" component={Orders} />
+
         <Route path="*">
           <Home />
         </Route>

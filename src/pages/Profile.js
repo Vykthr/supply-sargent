@@ -4,7 +4,7 @@ import PageContainer from '../components/PageContainer';
 import Dashlet from '../components/profile/Dashlet';
 import { Dashboard, AccountBalanceWallet, Settings, ShoppingCart, ShoppingBasket, ListAlt, Message, PermContactCalendar, ExitToApp } from '@material-ui/icons'
 import { useMediaQuery } from 'react-responsive'
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 import Permits from '../components/profile/Permits';
 import Wallet from '../components/profile/Wallet';
 import Products from '../components/profile/Products';
@@ -12,80 +12,29 @@ import EditProduct from '../components/profile/EditProduct';
 import { logoutUser } from '../redux/actions/user';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import trees from '../assets/images/trees.png'
+
+import cart from '../assets/images/cart.png'
+import permits from '../assets/images/permits.png'
+import logout from '../assets/images/logout.png'
+import orders from '../assets/images/orders.png'
+import products from '../assets/images/products.png'
+import wallet from '../assets/images/wallet.png'
 
 const Profile = ({ logoutUser, ...props}) => {
     const location = useLocation();
     const [ section, setSection ] = useState('')
     const [ product, setProduct ] = useState()
-    const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
+    const isTab = useMediaQuery({ query: '(max-width: 1280px)' })
     const history = useHistory()
-    const dashlets = [
-        {
-            icon: <AccountBalanceWallet style={{ color: "green" }} />,
-            data: 200,
-            label: 'Wallet Balance'
-        },
-        {
-            icon: <ShoppingBasket style={{ color: "green" }} />,
-            data: 200,
-            label: 'All Products'
-        },
-        {
-            icon: <ShoppingCart style={{ color: "green" }} />,
-            data: 200,
-            label: 'All Product Orders'
-        },
-        {
-            icon: <ListAlt style={{ color: "green" }} />,
-            data: 200,
-            label: 'All Transactions'
-        },
-        {
-            icon: <Message style={{ color: "green" }} />,
-            data: 200,
-            label: 'All Messages'
-        },
-    ]
- 
+
     const links = [
-        { link: '', label: 'Dashboard', icon: <Dashboard />},
-        { link: 'products', label: 'Products', icon: <ShoppingBasket />},
-        { link: 'prod-orders', label: 'Product Orders', icon: <ListAlt /> },
-        { link: 'permits', label: 'Permits', icon: <PermContactCalendar />},
-        { link: 'wallet', label: 'Wallet', icon: <AccountBalanceWallet />},
-        { link: 'settings', label: 'Settings', icon: <Settings />}
+        { link: 'products', label: 'Products', icon: products},
+        { link: 'cart', label: 'My Cart', icon: cart},
+        { link: 'permits', label: 'Permits', icon: permits },
+        { link: 'orders', label: 'Orders', icon: orders},
+        { link: 'wallet', label: 'Wallet', icon: wallet}
     ]
-
-    const getActiveColor = (sect) => {
-        const path = location.pathname.split('profile/')[1]
-        return (sect.includes(path) && (path !== '')) ? true : (path == '' && sect == '') ? true : false
-    }
-
-    const navigate = (link) => {
-        history.push(`/profile/${link}`)
-    }
-
-    const DashboardSection = () => (
-        <Grid container>
-            {
-                dashlets.map((dash, key) => (
-                    <Dashlet dashlet={dash} key={key} />
-                ))
-            }
-        </Grid>
-    )
-
-    const getSection = () => {
-        switch(section) {
-            case 'products': return <Products navigate={navigate} setProduct={setProduct} />
-            case 'permits': return <Permits />
-            case 'product': return <EditProduct product={product} />
-            case 'prod-orders': return <></>
-            case 'wallet': return <Wallet />
-            case '': return <DashboardSection />
-            default: return <> </>
-        }
-    }
 
     useEffect(() => {
         if(props.match.params.hasOwnProperty('section')) setSection(props.match.params.section)
@@ -93,34 +42,34 @@ const Profile = ({ logoutUser, ...props}) => {
     }, [props.match.params])
 
     return (
-        <PageContainer>
-            <Grid container style={{ marginLeft: '-1rem' }}>
-                <Grid item xs={2} className="profile-sidebar">
-                    <List>
-                        {
-                            links.map((link, key) => (
-                                <ListItem 
-                                    onClick={() => navigate(link.link)} 
-                                    alignItems="center" button key={key} 
-                                    className={getActiveColor(link.link) ? 'active-menu' : ''}
-                                >
-                                    <ListItemIcon>{link.icon}</ListItemIcon>
-                                    { !isPhone && <ListItemText primary={link.label} /> }
-                                </ListItem>
-                            ))
-                        }
-                        <ListItem 
-                            onClick={async () => await logoutUser()} 
-                            alignItems="center" button
-                        >
-                            <ListItemIcon><ExitToApp /></ListItemIcon>
-                            { !isPhone && <ListItemText primary="Logout" /> }
-                        </ListItem>
-                    </List>
+        <PageContainer type="profile" transparentHeader noBgPadding>
+            <Grid container>
+                <Grid container item xs={12} lg={4} style={{ padding: '8rem 2rem 2rem' }}>
+                    {
+                        links.map((link, key) => (
+                            <Grid key={key} xs={6} item style={{ padding: '1rem' }}>
+                                <Link to={`/profile/${link.link}`}>
+                                    <div className="dash-let">
+                                        <img src={link.icon} />
+                                        <p>{link.label}</p>
+                                    </div>
+                                </Link>
+                            </Grid>
+                        ))
+                    }
+                    <Grid xs={6} item style={{ padding: '1rem' }}>
+                        <div className="dash-let" onClick={() => logoutUser()}>
+                            <img src={logout} />
+                            <p>Log Out</p>
+                        </div>
+                    </Grid>
                 </Grid>
-                <Grid item xs={10} style={{ padding: '0rem 0 2rem 2rem' }}>
-                    { getSection() }
-                </Grid>
+                { 
+                    !isTab &&
+                    <Grid item xs={12} lg={8}>
+                        <img src={trees} style={{ width: '100%' }} />
+                    </Grid>
+                }
             </Grid>
         </PageContainer>
     )

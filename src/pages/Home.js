@@ -1,5 +1,5 @@
 import { Grid, Button } from '@material-ui/core'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom'
 import Logo from '../assets/images/whitelogo.png'
@@ -11,9 +11,9 @@ import { useMediaQuery } from 'react-responsive'
 
 const Home = ({ user, fetchAll }) => {
     const history = useHistory()
+    const [ userDetails, setDetails ] = useState()
     const isTab = useMediaQuery({ query: '(max-width: 950px)' })
 
-    
     const init = async () => {
         await fetchAll();
     }
@@ -21,14 +21,18 @@ const Home = ({ user, fetchAll }) => {
     useEffect(() => {
         init();
     }, [])
+
+    useEffect(() => {
+        Boolean(user.userData) && setDetails(user.userData)
+    }, [user])
     
     return (
         <div className="home">
             { isTab && <div className="overlay"></div> }
-            <PageContainer>
+            <PageContainer noBg transparentHeader>
                 <Grid container className="home-content">
                     <Grid item md={6} xs={12}>
-                        <p>Welcome to
+                        <p>{ Boolean(userDetails) ? <span style={{ fontSize: '70%', textTransform: 'capitalize', color: '#F1FE2B' }}> Hi, {`${userDetails.firstName} ${userDetails.lastName}`} </span> : 'Welcome to'}
                         <span>Supply <br/> Sargent</span>
                         </p>
 

@@ -4,6 +4,10 @@ import { useMediaQuery } from 'react-responsive'
 import { ThumbUpAlt, Grade, PersonAdd, Remove, Add } from '@material-ui/icons'
 import { connect } from 'react-redux'
 
+import tick from '../assets/images/tick.svg'
+import choice from '../assets/images/choice.svg'
+import badge from '../assets/images/badge.svg'
+
 const ProductCard = ({ product, general, addToCart, user }) => {
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
     const isTab = useMediaQuery({ query: '(max-width: 1200px)' })
@@ -31,16 +35,22 @@ const ProductCard = ({ product, general, addToCart, user }) => {
     }
 
     return (
-        <>
-            <Grid container className="product-card">
-                <Grid item xs={12} md={6}>
-                    <h4>{product.name}</h4>
-                    <h5 style={{ margin: '.5rem 0' }}>Seller: {product.seller}</h5>
-                    <img src={(product.images.length > 0) ? product.images[0].file : ''} />
+        <Grid xs={6} md={4} container className="product-card">
+            <Grid xs={12} container className="section wt-bg">
+                <Grid item xs={12}>
+                    <img className="img" src={(product.images.length > 0) ? product.images[0].file : ''} />
                 </Grid>
-                <Grid item xs={12} md={6}>
-                    <p className="rating"><Grade style={{ color: 'orange', height: 'inherit' }} /> {product.rating ? (product.rating * 1).toFixed(1) : 0}</p>
-                    
+                <Grid item xs={12}>
+                    <h4>{product.name}</h4>
+                    <h5>By {product.seller}</h5>
+                    <p>${product.price} <sup>PER {product.value}</sup></p>
+                </Grid>
+                <Grid className="icons" item xs={12} container alignItems="center" direction="row">
+                    <img src={choice} />
+                    <img src={tick} />
+                    <img src={tick} />
+                    <img src={badge} />
+                {/*                    
                     <div style={{ display: 'flex' }}>
                         <Button variant="outlined" color="primary" startIcon={<ThumbUpAlt /> }>     
                             { !isPhone && 'Like' }
@@ -76,10 +86,10 @@ const ProductCard = ({ product, general, addToCart, user }) => {
                         <Grid item xs={12} md={6} style={{ padding: isPhone ? '.25rem' : '0 .5rem 0 0' }}>
                             <Button variant="contained" color="primary" fullWidth style={{ height: '100%' }}>Message Seller</Button>
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </Grid>
-        </>
+        </Grid>
     )
 }
 

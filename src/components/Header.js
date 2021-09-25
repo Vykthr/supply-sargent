@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { PRIMARY_COLOR } from '../styles/colors'
 import Logo from '../assets/images/whitelogo.png'
+import LogoDark from '../assets/images/SS-White-Logo.png'
 import { AppBar, Toolbar, Grid, Divider, Drawer, List, ListItem, IconButton } from '@material-ui/core'
 import { Menu, Search } from '@material-ui/icons'
 import { Link } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
 import { connect } from 'react-redux'
-const Header = ({ user }) => {
+const Header = ({ type, user, logo = '', transparentHeader = false, secondary = false }) => {
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
     const [ cartList, setCartList ] = useState(user.cartList)
     const [drawer, setDrawer] = React.useState(false);
@@ -27,16 +28,21 @@ const Header = ({ user }) => {
     }, [user])
 // a	search	bar, and	'log	out.
     return (
-        <AppBar position="sticky" style={{ backgroundColor: 'transparent' }}>
+        <AppBar elevation={secondary ? 0 : 4} position={ type == 'profile' ? 'fixed' : 'sticky'} style={{ backgroundColor: transparentHeader ? 'transparent' : '#fff' }}>
             <Toolbar style={{ display: 'block' }}>
                 <nav>
                     <Grid container>
-                        <Grid item  className="d-flex align-center">
-                            <Link to="/">
-                                <img src={Logo} />
-                            </Link>
-                        </Grid>
-
+                        { 
+                            type !== 'profile' &&
+                            <Grid item  className="d-flex align-center">
+                                { 
+                                    !secondary && 
+                                    <Link to="/">
+                                        <img src={logo == 'dark' ? LogoDark : Logo } />
+                                    </Link>
+                                }
+                            </Grid>
+                        }
                         <Grid item className="d-flex align-center">
                             { 
                                 !isPhone ?
@@ -49,7 +55,7 @@ const Header = ({ user }) => {
                                     <li><Search style={{ color: "#FFF" }} /></li>
                                 </ul>
                                 :
-                                <Menu onClick={() => toggleDrawer()} style={{ color: "#FFF", fontSize: 35 }} />
+                                <Menu onClick={() => toggleDrawer()} style={{ color: "#000", fontSize: 35 }} />
                             }
                         </Grid>
                     </Grid>
