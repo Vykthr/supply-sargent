@@ -2,8 +2,8 @@ import { SET_ALL, SET_UTILITIES, SET_PRODUCTS } from "../actions/constants";
 
 const defaultState = {
     utilities: {
-
     },
+    news: [],
     products: [],
 };
 

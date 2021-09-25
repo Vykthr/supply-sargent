@@ -4,13 +4,18 @@ import Logo from '../assets/images/whitelogo.png'
 import LogoDark from '../assets/images/SS-White-Logo.png'
 import { AppBar, Toolbar, Grid, Divider, Drawer, List, ListItem, IconButton } from '@material-ui/core'
 import { Menu, Search } from '@material-ui/icons'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom';
+import { logoutUser } from '../redux/actions/user';
 import { useMediaQuery } from 'react-responsive'
 import { connect } from 'react-redux'
-const Header = ({ type, user, logo = '', transparentHeader = false, secondary = false }) => {
+import { bindActionCreators } from 'redux'
+
+const Header = ({ type, user, logo = '', transparentHeader = false, secondary = false, logoutUser }) => {
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
     const [ cartList, setCartList ] = useState(user.cartList)
     const [drawer, setDrawer] = React.useState(false);
+    const [userDetails, setUserDetails] = React.useState(user);
+    const history = useHistory()
     const toggleDrawer = () => {
         setDrawer(!drawer)
     };
@@ -21,10 +26,18 @@ const Header = ({ type, user, logo = '', transparentHeader = false, secondary = 
         { label: 'my dashboard', url: '/profile'},
         // { label: 'my cart', url: '/cart', badge: cartList.length}
     ]	
+
+    const handleRequest = async () => {
+        if(userDetails.authenticated) {
+            await logoutUser()
+        } else {
+            history.push('/login')
+        }
+    }
     
     useEffect(() => {
-        console.log(user)
         setCartList(user.cartList)
+        setUserDetails(user)
     }, [user])
 // a	search	bar, and	'log	out.
     return (
@@ -63,10 +76,10 @@ const Header = ({ type, user, logo = '', transparentHeader = false, secondary = 
             </Toolbar>
             <>
                 <Drawer className="custom-menu" anchor='right' open={drawer} onClose={() => toggleDrawer()}>
-                    <List>
+                    <List className="bg">
                         {
                             links.map(({label, url, badge=null}, key) => (
-                                <div  key={key}>
+                                <div key={key}>
                                     <ListItem>
                                         <Link to={url} style={{ textTransform: 'capitalize', color: '#212529', fontWeight: '600' }}>
                                             {label}{badge && badge}
@@ -77,9 +90,10 @@ const Header = ({ type, user, logo = '', transparentHeader = false, secondary = 
                                 </div>
                             ))
                         }
-                        <ListItem button>
-                            <Link  style={{ textTransform: 'capitalize', color: '#212529', fontWeight: '600' }} to='/'>
-                                Login
+                        
+                        <ListItem>
+                            <Link  style={{ textTransform: 'capitalize', color: '#212529', fontWeight: '600' }} onClick={() => handleRequest()}>
+                                { userDetails.authenticated ? 'Logout' : 'Login' }
                             </Link>
                         </ListItem>
                     </List>
@@ -91,4 +105,8 @@ const Header = ({ type, user, logo = '', transparentHeader = false, secondary = 
 
 const mapStateToProps = ({ general, user }) => ({ general, user })
 
-export default connect(mapStateToProps, null)(Header)
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({ logoutUser }, dispatch)
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

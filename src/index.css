@@ -269,6 +269,39 @@ p.rating {
     margin: 0 .2rem 0;
 }
 
+.news-card {
+    padding: 1rem;
+}
+.news-card img {
+    width: 100%;
+    object-fit: cover;
+}
+.news-card .name {
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 0;
+}
+.news-card .email {
+    margin-top: 0;
+}
+.news-card .actions p {
+    margin-bottom: .3rem;
+    margin-top: 0;
+    text-align: center;
+    font-weight: 600;
+}
+.news-card .actions button {
+    box-shadow: none;
+    height: 30px;
+    font-size: 12px;
+}
+.news-card p.views {
+    font-size: 23px;
+    margin-top: 1.5rem;
+}
+.news-card p.views span {
+    font-size: 75%;
+}
 
 .categories label {
     margin: 0;
@@ -589,6 +622,13 @@ div.form-control {
     margin: .2rem;
 }
 
+.custom-menu ul {
+    width: 50vw;
+}
+.custom-menu li {
+    padding: 1rem 2rem;
+}
+
 @media(max-width: 950px) {
     .world {
         display: none;
@@ -652,13 +692,16 @@ div.form-control {
         margin-right: 0 !important;
     }
     .product-card {
-        padding: 1rem 1rem 2rem;
+        padding: 1rem 0 .5rem;
     }
     .product-card > div:last-child {
         padding: 1rem;
     }
     button.home-btn.button {
         margin: 1rem auto 3rem;
+    }
+    button.btn, a.btn {
+        min-height: 45px;
     }
 
 }

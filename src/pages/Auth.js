@@ -60,9 +60,10 @@ const Auth = ({ loginUser, logoutUser, user }) => {
     const login = async (e) => {
         e.preventDefault();
         setLoginError('')
-        setProcessing(true)
         const { email, password } = loginForm
         if( email && password ) {
+            setProcessing(true)
+
             try{
                 await loginUser(loginForm)
                 history.push('news-feed')
@@ -81,7 +82,6 @@ const Auth = ({ loginUser, logoutUser, user }) => {
         e.preventDefault()
         setRegisterError('')
         setMessage('')
-        console.log(registerForm)
         const { firstName, lastName, email, password, confirmPassword } = registerForm
         if( firstName && lastName && email && password && password === confirmPassword ) {
             setProcessing(true)
@@ -146,7 +146,6 @@ const Auth = ({ loginUser, logoutUser, user }) => {
             { 
                 section === 'auth' && activeTab === 0 ? 
                 <form onSubmit={(e) => login(e)}>
-                    <h1>Login</h1>
                     <h3>Welcome Back to the Community</h3>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
@@ -195,7 +194,6 @@ const Auth = ({ loginUser, logoutUser, user }) => {
                 :
                 section === 'auth' && activeTab === 1 ?
                 <form onSubmit={(e) => register(e)}>
-                    <h1>Sign Up</h1>
                     <h3>Join our Community</h3>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>

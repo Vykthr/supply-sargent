@@ -35,8 +35,8 @@ const ProductCard = ({ product, general, addToCart, user }) => {
     }
 
     return (
-        <Grid xs={6} md={4} container className="product-card">
-            <Grid xs={12} container className="section wt-bg">
+        <Grid item xs={12} md={4} container className="product-card">
+            <Grid item xs={12} container className="section wt-bg">
                 <Grid item xs={12}>
                     <img className="img" src={(product.images.length > 0) ? product.images[0].file : ''} />
                 </Grid>
