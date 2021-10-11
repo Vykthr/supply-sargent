@@ -219,6 +219,7 @@ button.btn, a.btn {
 }
 .product-card {
     padding: 0 .5rem;
+    cursor: pointer;
 }
 .product-card .section {
     transition: .3s;

@@ -45,48 +45,11 @@ const ProductCard = ({ product, general, addToCart, user }) => {
                     <h5>By {product.seller}</h5>
                     <p>${product.price} <sup>PER {product.value}</sup></p>
                 </Grid>
-                <Grid className="icons" item xs={12} container alignItems="center" direction="row">
+                <Grid className="icons" item xs={12} container alignItems="center" direction="row" wrap="nowrap">
                     <img src={choice} />
                     <img src={tick} />
                     <img src={tick} />
                     <img src={badge} />
-                {/*                    
-                    <div style={{ display: 'flex' }}>
-                        <Button variant="outlined" color="primary" startIcon={<ThumbUpAlt /> }>     
-                            { !isPhone && 'Like' }
-                        </Button>
-                        <Button variant="outlined" color="primary" startIcon={<PersonAdd /> }>
-                        { !isPhone && 'Follow' }
-                        </Button>
-                        <span className="price">${product.price}</span>
-                        <span className="price-sup">TTD</span>
-                    </div>
-
-                    <p>Product Value: <span>{product.value}</span></p>
-                    <p>Condition: <span>{product.condition}</span></p>
-                    <p>Location: <span>{product.location}</span></p>
-                    <p>Availability: <span>{product.availability}</span></p>
-                    <p>Distance: <span></span></p>
-
-                    <Grid container>
-                        <Grid container item xs={12} md={6} style={{ padding: isPhone ? '.25rem' : '0 .5rem 0 0' }}>
-                            {
-                                (cartList.map(({ id }) => id).indexOf(product.id) === -1) ?
-                                <Button onClick={() => addToCartList()} variant="contained" color="primary" fullWidth style={{ height: '100%' }} >
-                                    Add to cart
-                                </Button>
-                                :
-                                <div className="cart-add-btns">
-                                    <IconButton><Remove /></IconButton>
-                                    <span>{getQuantity()}</span>
-                                    <IconButton onClick={() => addToCartList()}><Add /></IconButton>
-                                </div>
-}
-                        </Grid>
-                        <Grid item xs={12} md={6} style={{ padding: isPhone ? '.25rem' : '0 .5rem 0 0' }}>
-                            <Button variant="contained" color="primary" fullWidth style={{ height: '100%' }}>Message Seller</Button>
-                        </Grid>
-                    </Grid> */}
                 </Grid>
             </Grid>
         </Grid>

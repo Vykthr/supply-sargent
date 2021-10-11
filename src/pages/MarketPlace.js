@@ -79,7 +79,7 @@ const MarketPlace = ({ general, fetchAll, addToCart }) => {
                     </div>
                 </Grid> }
                 
-                <Grid item xs={12} md={9} lg={8} container>
+                <Grid item xs={12} md={9} lg={8} container spacing={2} style={{ padding: isPhone ? 0 : '1rem' }}>
                     {
                         products.map((product, key) => (
                             <ProductCard addToCart={addToCart} key={key} product={product} />
@@ -124,7 +124,7 @@ const MarketPlace = ({ general, fetchAll, addToCart }) => {
                     </div>
                 </Grid>
                 
-                { !isPhone && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar">
+                { isPhone && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar">
                     <div className="MuiAppBar-positionSticky" style={{ top: '120px' }}>
 
                         <div className="section wt-bg">
