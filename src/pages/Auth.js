@@ -66,7 +66,7 @@ const Auth = ({ loginUser, logoutUser, user }) => {
 
             try{
                 await loginUser(loginForm)
-                history.push('news-feed')
+                history.push('/')
             }
             catch(err) {
                 setLoginError(err.message)

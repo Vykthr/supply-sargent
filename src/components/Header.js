@@ -23,7 +23,7 @@ const Header = ({ type, user, logo = '', transparentHeader = false, secondary = 
         { label: 'Home', url: '/'},
         { label: 'Newsfeed', url: '/newsfeed'},
         { label: 'Marketplace', url: '/marketplace'},
-        { label: 'my dashboard', url: '/profile'},
+        { label: 'my dashboard', url: '/account'},
         // { label: 'my cart', url: '/cart', badge: cartList.length}
     ]	
 

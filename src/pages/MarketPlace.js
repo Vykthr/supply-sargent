@@ -90,34 +90,37 @@ const MarketPlace = ({ general, fetchAll, addToCart }) => {
                 <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar right">
                     <div className="MuiAppBar-positionSticky" style={{  top: '120px' }}>
                         <Button className="btn" color="primary" variant="contained" fullWidth>
-                            Upload an Item
+                            Upload an Product
                         </Button>
 
                         <Button className="btn white" color="inherit" variant="contained" fullWidth>
-                            Verify your account
+                            Advanced Search
                         </Button>
 
                         <div className="section wt-bg">
                             <h4 className="sectionTitle">Change Currency</h4>
-                            <List>
-                                <ListItem>
-                                    <Person />
-                                    <p className="no-margin">Jane Doe</p>
-                                </ListItem>
-                            </List>
+                            <TextField select SelectProps={{ native: true, style: { height: '40px' } }} variant="outlined" fullWidth style={{ margin: '.5rem 0 0' }} >
+                                <option value="">Select an option</option>
+                            </TextField>
                         </div>
 
                         <div className="section wt-bg">
                             <h4 className="sectionTitle">Wallet Balance</h4>
+
+                            <h4 className="sectionTitle price">$0.00<sub>TTD</sub></h4>
                             <Button className="btn red" color="primary" variant="contained" fullWidth>
                                 Go to wallet
                             </Button>
-                            <List>
-                                <ListItem>
-                                    <Person />
-                                    <p className="no-margin">Jane Doe</p>
-                                </ListItem>
-                            </List>
+
+                            <label className="sectionTitle form-label">Vendors</label>
+                            <TextField select SelectProps={{ native: true, style: { height: '40px' } }} variant="outlined" fullWidth >
+                                <option value="">All Vendors</option>
+                            </TextField>
+
+                            <label className="sectionTitle form-label">Radius Meter</label>
+                            <TextField InputProps={{ style: { height: '40px' } }} type="number" variant="outlined" fullWidth 
+                                placeholder="Ex. 10km"
+                            />
                         </div>
 
 

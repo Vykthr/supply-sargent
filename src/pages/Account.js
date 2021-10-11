@@ -21,7 +21,7 @@ import orders from '../assets/images/orders.png'
 import products from '../assets/images/products.png'
 import wallet from '../assets/images/wallet.png'
 
-const Profile = ({ logoutUser, ...props}) => {
+const Account = ({ logoutUser, ...props}) => {
     const location = useLocation();
     const [ section, setSection ] = useState('')
     const [ product, setProduct ] = useState()
@@ -48,7 +48,7 @@ const Profile = ({ logoutUser, ...props}) => {
                     {
                         links.map((link, key) => (
                             <Grid key={key} xs={6} item style={{ padding: '1rem' }}>
-                                <Link to={`/profile/${link.link}`}>
+                                <Link to={`/account/${link.link}`}>
                                     <div className="dash-let">
                                         <img src={link.icon} />
                                         <p>{link.label}</p>
@@ -79,4 +79,4 @@ const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({ logoutUser }, dispatch)
 }
 
-export default connect(null, mapDispatchToProps)(Profile)
+export default connect(null, mapDispatchToProps)(Account)
