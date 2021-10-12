@@ -1,25 +1,25 @@
 import { Divider, Grid, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import React, { useEffect, useState } from 'react'
-import PageContainer from '../components/PageContainer';
-import Dashlet from '../components/profile/Dashlet';
+import PageContainer from '../../components/PageContainer';
+import Dashlet from '../../components/profile/Dashlet';
 import { Dashboard, AccountBalanceWallet, Settings, ShoppingCart, ShoppingBasket, ListAlt, Message, PermContactCalendar, ExitToApp } from '@material-ui/icons'
 import { useMediaQuery } from 'react-responsive'
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import Permits from '../components/profile/Permits';
-import Wallet from '../components/profile/Wallet';
-import Products from '../components/profile/Products';
-import EditProduct from '../components/profile/EditProduct';
-import { logoutUser } from '../redux/actions/user';
+import Permits from '../../components/profile/Permits';
+import Wallet from '../../components/profile/Wallet';
+import Products from '../../components/profile/Products';
+import EditProduct from '../../components/profile/EditProduct';
+import { logoutUser } from '../../redux/actions/user';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import trees from '../assets/images/trees.png'
+import trees from '../../assets/images/trees.png'
 
-import cart from '../assets/images/cart.png'
-import permits from '../assets/images/permits.png'
-import logout from '../assets/images/logout.png'
-import orders from '../assets/images/orders.png'
-import products from '../assets/images/products.png'
-import wallet from '../assets/images/wallet.png'
+import cart from '../../assets/images/cart.png'
+import permits from '../../assets/images/permits.png'
+import logout from '../../assets/images/logout.png'
+import orders from '../../assets/images/orders.png'
+import products from '../../assets/images/products.png'
+import wallet from '../../assets/images/wallet.png'
 
 const Account = ({ logoutUser, ...props}) => {
     const location = useLocation();

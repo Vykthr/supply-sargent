@@ -1,10 +1,10 @@
-import { Table, TableBody, TableHead, TableRow, TableCell, TableFooter, Button, ListItemText, IconButton, Grid } from '@material-ui/core';
+import { Table, TableBody, TableHead, TableRow, TableCell, Button, ListItemText, IconButton, Grid } from '@material-ui/core';
 import { Delete, Remove, Add } from '@material-ui/icons';
 import React, { useState, useEffect } from 'react'
-import PageContainer from '../components/PageContainer';
 import { connect } from 'react-redux';
-import { addToCart } from '../redux/actions/user';
+import { addToCart } from '../../redux/actions/user';
 import { bindActionCreators } from 'redux';
+import AccountComponent from '../../components/account/AccountComponent';
 
 const Cart = ({ user, addToCart }) => {
 
@@ -15,7 +15,8 @@ const Cart = ({ user, addToCart }) => {
     }, [user])
 
     return (
-        <PageContainer pageTitle="My Cart">
+        <AccountComponent section="cart">
+            
             <Table>
                 <TableHead stickyHeader >
                     <TableRow>
@@ -66,7 +67,8 @@ const Cart = ({ user, addToCart }) => {
                     
                 </Grid>
             </Grid>
-        </PageContainer>
+        </AccountComponent>
+
     )
 }
 

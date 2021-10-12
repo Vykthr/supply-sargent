@@ -5,10 +5,10 @@ import Logo from '../assets/images/whitelogo.png'
 import World from '../assets/images/world.png'
 import { Grid } from '@material-ui/core'
 
-const PageContainer = ({ secondary = false, pageTitle, type = '', noBgPadding, ...props }) => {
+const PageContainer = ({ secondary = false, pageTitle, type = '', account, noBgPadding, transparentHeader, ...props }) => {
     return (
         <div className={ secondary && "bg"} style={{ display: 'flex', flexDirection: 'column' }}>
-            <Header secondary={secondary} type={type} transparentHeader={props?.transparentHeader || secondary} logo={props?.logo || ''}/>
+            <Header secondary={secondary} type={type} transparentHeader={transparentHeader || secondary} logo={props?.logo || ''}/>
             {
                 secondary ?
                 <Grid container style={{ minHeight: '100%' }}>

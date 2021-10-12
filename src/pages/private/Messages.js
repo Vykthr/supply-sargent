@@ -1,6 +1,6 @@
 import { Grid, List, ListItem, ListItemAvatar, ListItemText, Avatar, ListItemSecondaryAction, Divider } from '@material-ui/core';
 import React, { useState, useEffect } from 'react'
-import PageContainer from '../components/PageContainer';
+import PageContainer from '../../components/PageContainer';
 import ChatView from './ChatView';
 import moment from 'moment'
 
