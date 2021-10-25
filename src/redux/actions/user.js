@@ -24,10 +24,11 @@ export const updateProfile = (email, payload = null) => {
   return async (dispatch) => {
     try {
         if(payload) await userApi.updateProfile(email, payload);
-        const userData = await (await userApi.getUserData(email)).data();
+        const res = await userApi.getUserData(email);
+        const userData = res.data()
         localStorage.setItem("supply-sargent", JSON.stringify(userData));
         await dispatch({
-          type: USER_UPDATE,
+          type: USER_LOGIN,
           payload: userData,
         });
         return Promise.resolve(userData);

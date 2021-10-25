@@ -2,11 +2,11 @@ import firebase from "./config";
 
 export default {
     async fetchUtilities() {
-      let utilities = [];
-      await firebase.firestore().doc('utilities/general').get().then(async (doc)=> {
-        utilities = doc.data()
-      })
-      return utilities;
+        let utilities = [];
+        await firebase.firestore().doc('utilities/general').get().then(async (doc)=> {
+            utilities = doc.data()
+        })
+        return utilities;
     },
     async fetchProducts() {
       var products = [];
@@ -77,6 +77,18 @@ export default {
         bar.then(async () => {
             return firebase.firestore().doc(`products/${productId}`).update({ ...payload, images, updated  });
         });
-    }
+    },
+    // async addPermits() {
+    //     await firebase.firestore().doc('utilities/general').update({
+    //         permits: [
+    //             { id: 1, name: 'content creator', price: 1.99 },
+    //             { id: 2, name: 'seedlings', price: 5.99 },
+    //             { id: 3, name: 'professional', price: 9.99 },
+    //             { id: 4, name: 'agro-shops', price: 12.99 },
+    //             { d: 5, name: 'agro-business', price: 14.99 },
+    //             { id: 6, name: 'farmer', price: 15.99 },
+    //         ]
+    //     })
+    // }
 };
 

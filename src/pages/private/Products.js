@@ -55,7 +55,7 @@ const Products = ({ navigate, user, setProduct, general }) => {
     return (
         <AccountComponent section="products">
             <Grid container>
-                <Button>Add a product</Button>
+                <Button onClick={(e) => setToggleModal(true)}>Add a product</Button>
             </Grid>
 
             <div style={{ maxWidth: '100%',  }}>

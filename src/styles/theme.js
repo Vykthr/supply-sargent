@@ -4,26 +4,29 @@ import { ThemeProvider } from '@material-ui/styles';
 import * as colors from './colors';
 
 const theme = createMuiTheme({
-  palette: {
-    primary: {
-      // light: will be calculated from palette.primary.main,
-      main: colors.PRIMARY_COLOR,
-      // dark: will be calculated from palette.primary.main,
-      contrastText: colors.WHITE_COLOR,
+    palette: {
+        primary: {
+        // light: will be calculated from palette.primary.main,
+        main: colors.PRIMARY_COLOR,
+        // dark: will be calculated from palette.primary.main,
+        contrastText: colors.WHITE_COLOR,
+        },
+        secondary: {
+        // light: will be calculated from palette.primary.main,
+        main: '#f44336',
+        // dark: will be calculated from palette.primary.main,
+        contrastText: '#f44336',
+        },
+        light: {
+        // light: will be calculated from palette.primary.main,
+        main: colors.WHITE_COLOR,
+        // dark: will be calculated from palette.primary.main,
+        //   contrastText: CONSTANTS.CONTRAST_TEXT,
+        },
     },
-    secondary: {
-      // light: will be calculated from palette.primary.main,
-      main: '#f44336',
-      // dark: will be calculated from palette.primary.main,
-      contrastText: '#f44336',
-    },
-    light: {
-      // light: will be calculated from palette.primary.main,
-      main: colors.WHITE_COLOR,
-      // dark: will be calculated from palette.primary.main,
-    //   contrastText: CONSTANTS.CONTRAST_TEXT,
-    },
-  },
+    typography: {
+        fontFamily: 'Montserrat, sans-serif'
+    }
 
 });
 

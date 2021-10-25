@@ -1,4 +1,4 @@
-import { Button, Grid, IconButton } from '@material-ui/core'
+import { Button, Grid, IconButton, LinearProgress } from '@material-ui/core'
 import React, { useState, useEffect } from 'react'
 import PageContainer from '../PageContainer'
 import trees from '../../assets/images/trees.png'
@@ -21,7 +21,7 @@ const links = [
 ]
 
 
-const AccountComponent = ({ children, section }) => {
+const AccountComponent = ({ children, section, processing }) => {
     const history = useHistory()
     const [ active, setActive ] = useState(links[0]);
     const isTab = useMediaQuery({ query: '(max-width: 1280px)' })
@@ -43,10 +43,10 @@ const AccountComponent = ({ children, section }) => {
     }
 
     return (
-        <PageContainer type="profile" transparentHeader noBgPadding>
+        <PageContainer type="profile" transparentHeader noBgPadding >
             <Grid container>
                 <Grid item xs={12} md={12} lg={6} container style={{ padding: '8rem 2rem 2rem' }}>
-                    <Grid xs={12} item style={{ padding: '1rem' }} container direction="row" justifyContent="center" alignItems="center">
+                    <Grid xs={12} item style={{ padding: '1rem' }} container direction="row" justifyContent="center" alignItems="center" wrap="nowrap">
                         <Button onClick={() => navigate('previous')} style={{ height: '200px', margin: '0 .5rem' }}><ChevronLeft /></Button>
                         <div className="dash-let" style={{ width: '200px', height: '200px', padding: '1rem' }}>
                             <img src={active.icon} />
@@ -56,6 +56,7 @@ const AccountComponent = ({ children, section }) => {
                     </Grid>
                     <Grid xs={12} item>
                         <div className="wt-bg">
+                            { processing && <LinearProgress className="mt-1 mb-1" /> }
                             {children}
                         </div>
                     </Grid>

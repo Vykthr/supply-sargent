@@ -34,6 +34,23 @@ const Header = ({ type, user, logo = '', transparentHeader = false, secondary = 
             history.push('/login')
         }
     }
+
+    useEffect(() => {
+        window.addEventListener('scroll', (e) => {
+            const nav = document.querySelector('#float')
+            // const childDiv = document.querySelector('#float #float-div')
+            const scrollValue = document.documentElement.scrollTop || document.body.scrollTop
+            if(scrollValue) { 
+                if(scrollValue > 100 ) {
+                    nav?.setAttribute('style', 'background: #fff'); 
+                    // childDiv?.setAttribute('style', 'padding: 0 5%');
+                } else {
+                    nav?.setAttribute('style', `background: ${transparentHeader ? 'transparent' : '#fff'}`)
+                    // childDiv?.removeAttribute('style'); 
+                }
+            }
+        })
+    }, [])
     
     useEffect(() => {
         setCartList(user.cartList)
@@ -41,7 +58,7 @@ const Header = ({ type, user, logo = '', transparentHeader = false, secondary = 
     }, [user])
 // a	search	bar, and	'log	out.
     return (
-        <AppBar elevation={secondary ? 0 : 4} position={ type == 'profile' ? 'fixed' : 'sticky'} style={{ backgroundColor: transparentHeader ? 'transparent' : '#fff' }}>
+        <AppBar id="float" elevation={secondary ? 0 : 4} position={ type == 'profile' ? 'fixed' : 'sticky'} style={{ backgroundColor: transparentHeader ? 'transparent' : '#fff' }}>
             <Toolbar style={{ display: 'block' }}>
                 <nav>
                     <Grid container>
