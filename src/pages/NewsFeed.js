@@ -9,41 +9,69 @@ import { fetchAll } from '../redux/actions/general';
 import { addToCart } from '../redux/actions/user';
 import { Link } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
+import generalApi from '../redux/api/general'
+import AddFeed from '../components/AddFeed'
 
-const NewsFeed = ({ general, fetchAll, addToCart }) => {
+const NewsFeed = ({ general, fetchAll, user, addToCart }) => {
+    const [ creators, setCreators ] = useState([])
     const [ categories, setCategories ] = useState([])
+    const [ userData, setUserData ] = useState({})
+    const [ fetching, setFetching ] = useState(false)
+    const [ openDialog, setOpenDialog ] = useState(false)
     const [ categoriesHeight, setCategoriesHeight ] = useState('200px')
-    const [ news, setNews ] = useState(general.news)
+    const [ news, setNews ] = useState([])
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
     const isTab = useMediaQuery({ query: '(max-width: 1200px)' })
 
-
-    useEffect(() => {
-        updateAll();
-    }, [general])
-
     const updateAll = () => {
-        // setNews(general.news)
-        setNews([
-            { user: { name: 'John Doe', image: 'https://source.unsplash.com/1024x1024/?person', email: 'johndoe@gmail.com', followers: 233 }, postImage: 'https://source.unsplash.com/1024x768/?agriculture', caption: 'A good caption for testing posts', views: 1220, likes: 82 },
-            { user: { name: 'John Doe', image: 'https://source.unsplash.com/1024x1024/?face', email: 'johndoe@gmail.com', followers: 233 }, postImage: 'https://source.unsplash.com/1024x768/?farm', caption: 'A good caption for testing posts', views: 1220, likes: 82 },
-            { user: { name: 'John Doe', image: 'https://source.unsplash.com/1024x1024/?male', email: 'johndoe@gmail.com', followers: 233 }, postImage: 'https://source.unsplash.com/1024x768/?produce', caption: 'A good caption for testing posts', views: 1220, likes: 82 },
-            { user: { name: 'John Doe', image: 'https://source.unsplash.com/1024x1024/?passport', email: 'johndoe@gmail.com', followers: 233 }, postImage: 'https://source.unsplash.com/1024x768/?farming-product', caption: 'A good caption for testing posts', views: 1220, likes: 82 },
-            { user: { name: 'John Doe', image: 'https://source.unsplash.com/1024x1024/?female', email: 'johndoe@gmail.com', followers: 233 }, postImage: 'https://source.unsplash.com/1024x768/?farming', caption: 'A good caption for testing posts', views: 1220, likes: 82 }
-        ])
+        init()
+        getCreators()
+
     }
 
     const init = async () => {
-        await fetchAll();
+        try{
+            setFetching(true)
+            const docs = await generalApi.getNewsFeeds()
+            setNews(docs)
+        } 
+        catch(err) {
+            console.log(err)
+        }
+        finally {
+            setFetching(false)
+        }
+    }
+
+    const getCreators = async () => {
+        try{
+            setFetching(true)
+            const docs = await generalApi.getContentCreators()
+            console.log(docs)
+            // setCreators(docs)
+        } 
+        catch(err) {
+            console.log(err)
+        }
+        finally {
+            setFetching(false)
+        }
     }
 
     useEffect(() => {
-        init();
+        if(openDialog === false) {
+        };
+        updateAll()
     }, [])
+
+
+    useEffect(() => {
+        setUserData(user?.userData || {});
+    }, [user])
     
     
     return (
-        <PageContainer logo="dark">
+        <PageContainer processing={fetching} logo="dark">
             <Grid container>
                 { !isPhone && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar">
                     <div className="MuiAppBar-positionSticky" style={{ top: '120px' }}>
@@ -91,7 +119,7 @@ const NewsFeed = ({ general, fetchAll, addToCart }) => {
             
                 <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar right">
                     <div className="MuiAppBar-positionSticky" style={{  top: '120px' }}>
-                        <Button className="btn" color="primary" variant="contained" fullWidth>
+                        <Button className="btn" color="primary" variant="contained" fullWidth onClick={() => setOpenDialog(true)}>
                             Upload Content
                         </Button>
 
@@ -102,16 +130,23 @@ const NewsFeed = ({ general, fetchAll, addToCart }) => {
                         <div className="section wt-bg">
                             <h4 className="sectionTitle">Content Creators</h4>
                             <List>
-                                <ListItem>
-                                    <Person />
-                                    <p className="no-margin">Jane Doe</p>
-                                </ListItem>
+                                {
+                                    creators.map((creator, key) => (
+                                        <ListItem key={key}>
+                                            <Person />
+                                            <span className="no-margin ml-1">{creator?.lastName} {creator?.firstName}</span>
+                                        </ListItem>
+                                    ))
+                                }
                             </List>
                         </div>
 
                         <div className="section wt-bg">
                             <h4 className="sectionTitle">Followed Profiles</h4>
                             <List>
+                                {/* {
+                                    userData.followers
+                                } */}
                                 <ListItem>
                                     <Person />
                                     <p className="no-margin">Jane Doe</p>
@@ -158,11 +193,13 @@ const NewsFeed = ({ general, fetchAll, addToCart }) => {
                     </div>
                 </Grid> }
             </Grid>
+
+            <AddFeed open={openDialog} setOpenDialog={setOpenDialog} user={userData?.email || null} freeTrial={userData?.freeTrial || null} />
         </PageContainer>
     )
 }
 
-const mapStateToProps = ({ general }) => ({ general })
+const mapStateToProps = ({ general, user }) => ({ general, user })
 
 const mapDispatchToProps = (dispatch) => {
     return bindActionCreators({ fetchAll, addToCart }, dispatch)

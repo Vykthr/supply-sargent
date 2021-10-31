@@ -1,12 +1,16 @@
 import { USER_LOGIN, USER_LOGOUT, USER_UPDATE, UPDATE_CART } from "./constants";
 import userApi from "../api/user";
+import moment from 'moment'
 
 export const loginUser = (payload, checked) => {
   return async (dispatch) => {
     try {
       const response = await userApi.loginUser(payload);
       if(response) {
-        const userData = await (await userApi.getUserData(payload.email)).data();
+        let userData = await (await userApi.getUserData(payload.email)).data();
+        userData['freeTrial'] = userData?.registered ? 
+            (moment(userData?.registered).fromNow() < '3 Months ago') ? true : false            
+        : false
         localStorage.setItem("supply-sargent", JSON.stringify(userData));
         await dispatch({
           type: USER_LOGIN,
@@ -25,7 +29,10 @@ export const updateProfile = (email, payload = null) => {
     try {
         if(payload) await userApi.updateProfile(email, payload);
         const res = await userApi.getUserData(email);
-        const userData = res.data()
+        let userData = res.data()
+        userData['freeTrial'] = userData?.registered ? 
+            (moment(userData?.registered).fromNow() < '3 Months ago') ? true : false            
+            : false
         localStorage.setItem("supply-sargent", JSON.stringify(userData));
         await dispatch({
           type: USER_LOGIN,

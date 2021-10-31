@@ -35,24 +35,26 @@ const ProductCard = ({ product, general, addToCart, user }) => {
     }
 
     return (
-        <Grid item xs={12} md={4} container className="product-card">
-            <Grid item xs={12} container className="section wt-bg">
-                <Grid item xs={12}>
-                    <img className="img" src={(product.images.length > 0) ? product.images[0].file : ''} />
-                </Grid>
-                <Grid item xs={12}>
-                    <h4>{product.name}</h4>
-                    <h5>By {product.seller}</h5>
-                    <p>${product.price} <sup>PER {product.value}</sup></p>
-                </Grid>
-                <Grid className="icons" item xs={12} container alignItems="center" direction="row" wrap="nowrap">
-                    <img src={choice} />
-                    <img src={tick} />
-                    <img src={tick} />
-                    <img src={badge} />
+        // <Link to>
+            <Grid item xs={12} md={4} container className="product-card">
+                <Grid item xs={12} container className="section wt-bg">
+                    <Grid item xs={12}>
+                        <img className="img" src={(product.images.length > 0) ? product.images[0].file : ''} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <h4>{product.name}</h4>
+                        <h5>By {product.seller}</h5>
+                        <p>${product.price} <sup>PER {product.value}</sup></p>
+                    </Grid>
+                    <Grid className="icons" item xs={12} container alignItems="center" direction="row" wrap="nowrap">
+                        <img src={choice} />
+                        <img src={tick} />
+                        <img src={tick} />
+                        <img src={badge} />
+                    </Grid>
                 </Grid>
             </Grid>
-        </Grid>
+        // </Link>
     )
 }
 

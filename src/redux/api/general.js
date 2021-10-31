@@ -1,4 +1,5 @@
 import firebase from "./config";
+import userApi from "./user";
 
 export default {
     async fetchUtilities() {
@@ -90,5 +91,47 @@ export default {
     //         ]
     //     })
     // }
+    async addFeed({ image, ...payload }) {
+        const added = Date.now()
+        await new Promise(async (resolve, reject) => {
+            await firebase.firestore().collection('news-feeds').add({ ...payload, added, views: [], likes: []  }).then(async (res) => {
+                const imageRef = firebase.storage().ref().child(`news-feeds/${res.id}/image`)
+                await imageRef.put(image, { contentType: 'image/jpeg' }).then(async () => {
+                    await imageRef.getDownloadURL().then(async (downloadURL) => {
+                        await firebase.firestore().doc(`news-feeds/${res.id}`).update({ image: downloadURL })
+                        resolve()
+                    });
+                })
+            })
+        })
+    },
+    async getNewsFeeds(per_page = 100) {
+        var feeds = [];
+        await firebase.firestore().collection(`news-feeds`).orderBy("added").limit(per_page).get().then(async (res)=> {
+            new Promise((resolve, reject) => {
+            res.docs.forEach(async (doc, index, array) => {
+                const data = doc.data()
+                // newDoc['id'] = doc.id
+                const user = await (await userApi.getUserData(data.user)).data()
+
+                feeds.push({ ...data, name: user?.lastName + ' ' + user?.firstName, photoImage: user?.image || '', followers: user?.followers || [] })
+                if (index === array.length -1) resolve();
+            })
+            });
+        })
+        return feeds
+    },
+    async getContentCreators(per_page = 100) {
+        new Promise(async (resolve, reject) => {
+            var results = [];
+            return firebase.firestore().collection(`permits`).where('expires', '>', Date.now()).where('id', '==', 1).limit(per_page).get().then(async (res)=> {
+                res.docs.forEach(async (doc, index, array) => {
+                    const user = (await userApi.getUserData(doc.data().user)).data()
+                    if(!results.find((res) => res.email = user.email))results.push(user)
+                    if (index === array.length -1) resolve(results)
+                })
+            });
+        })
+    },
 };
 

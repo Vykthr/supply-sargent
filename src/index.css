@@ -53,8 +53,13 @@ header nav ul li a{
     font-weight: 600;
     text-transform: capitalize;
 }
-
-
+.text-capitalize {
+    text-transform: capitalize;
+}
+.text-primary {
+    color: #093028;
+    font-weight: 700;
+}
 .sectionTitle {
     font-weight: 900;
     font-size: 14px;
