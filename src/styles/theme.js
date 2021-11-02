@@ -1,9 +1,9 @@
 import React from 'react';
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import * as colors from './colors';
 
-const theme = createMuiTheme({
+const theme = createTheme({
     palette: {
         primary: {
         // light: will be calculated from palette.primary.main,

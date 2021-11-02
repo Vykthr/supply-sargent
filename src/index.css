@@ -458,6 +458,20 @@ div.form-control {
     text-align: center;
     font-size: 14px;
 }
+.image-holder:hover .del-image {
+    display: block;
+}
+.del-image {
+    display: none;
+    background-color: #fff;
+    border-radius: 5px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+}
+.del-image svg {
+    fill: #D10404;
+}
 
 .profile-sidebar {
     border-right: 1.5px solid;
@@ -585,15 +599,18 @@ div.form-control {
 .image-holder {
     transition: .3s;
     border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     color: #093028;
     padding: .5rem;
     height: 250px;
     border: 2px solid #093028;
     cursor: pointer;
+}
+.image-holder > div:first-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%; width: 100%;
 }
 .image-holder svg, .image-holder img {
     display: block;

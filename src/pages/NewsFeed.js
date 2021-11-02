@@ -5,34 +5,36 @@ import NewsCard from '../components/NewsCard'
 import { Search, Person } from '@material-ui/icons'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import { fetchAll } from '../redux/actions/general';
+import { fetchNewsFeeds, fetchUsers } from '../redux/actions/general';
 import { addToCart } from '../redux/actions/user';
 import { Link } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
 import generalApi from '../redux/api/general'
 import AddFeed from '../components/AddFeed'
 
-const NewsFeed = ({ general, fetchAll, user, addToCart }) => {
+const NewsFeed = ({ general, fetchNewsFeeds, fetchUsers, user }) => {
     const [ creators, setCreators ] = useState([])
     const [ categories, setCategories ] = useState([])
     const [ userData, setUserData ] = useState({})
     const [ fetching, setFetching ] = useState(false)
     const [ openDialog, setOpenDialog ] = useState(false)
     const [ categoriesHeight, setCategoriesHeight ] = useState('200px')
-    const [ news, setNews ] = useState([])
+    const [ news, setNews ] = useState(general.news)
+    const [ users, setUsers ] = useState(general.users)
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
     const isTab = useMediaQuery({ query: '(max-width: 1200px)' })
 
-    const updateAll = () => {
-        init()
-        getCreators()
+    const updateAll = async () => {
+        await init()
+        await getCreators()
 
     }
 
     const init = async () => {
         try{
             setFetching(true)
-            const docs = await generalApi.getNewsFeeds()
+            const docs = await fetchNewsFeeds(); 
+            await fetchUsers();
             setNews(docs)
         } 
         catch(err) {
@@ -46,8 +48,8 @@ const NewsFeed = ({ general, fetchAll, user, addToCart }) => {
     const getCreators = async () => {
         try{
             setFetching(true)
-            const docs = await generalApi.getContentCreators()
-            console.log(docs)
+            const permits = await generalApi.getPermits()
+            setCreators(permits.map((permit) => users.find(usr => usr.email === permit.user)));
             // setCreators(docs)
         } 
         catch(err) {
@@ -59,10 +61,13 @@ const NewsFeed = ({ general, fetchAll, user, addToCart }) => {
     }
 
     useEffect(() => {
-        if(openDialog === false) {
-        };
-        updateAll()
-    }, [])
+        setNews(general.news)
+        setUsers(general.users)
+    }, [general])
+
+    useEffect(() => {
+        if(!openDialog) updateAll()
+    }, [openDialog])
 
 
     useEffect(() => {
@@ -111,7 +116,7 @@ const NewsFeed = ({ general, fetchAll, user, addToCart }) => {
                 
                 <Grid item xs={12} md={9} lg={8} container>
                     {
-                        news.map((news, key) => (
+                        news.sort((a, b) => (a.added > b.added) ? -1 : 1).map((news, key) => (
                             <NewsCard key={key} news={news} />
                         ))
                     }
@@ -127,14 +132,14 @@ const NewsFeed = ({ general, fetchAll, user, addToCart }) => {
                             Verify your account
                         </Button>
 
-                        <div className="section wt-bg">
+                        <div className="section wt-bg pl-1 pr-1">
                             <h4 className="sectionTitle">Content Creators</h4>
                             <List>
                                 {
                                     creators.map((creator, key) => (
-                                        <ListItem key={key}>
-                                            <Person />
-                                            <span className="no-margin ml-1">{creator?.lastName} {creator?.firstName}</span>
+                                        <ListItem key={key} className="no-margin no-padding">
+                                            <Person style={{ marginRight: '.5rem' }} />
+                                            <b className="no-margin">{creator?.lastName} {creator?.firstName}</b>
                                         </ListItem>
                                     ))
                                 }
@@ -144,19 +149,21 @@ const NewsFeed = ({ general, fetchAll, user, addToCart }) => {
                         <div className="section wt-bg">
                             <h4 className="sectionTitle">Followed Profiles</h4>
                             <List>
-                                {/* {
-                                    userData.followers
-                                } */}
-                                <ListItem>
-                                    <Person />
-                                    <p className="no-margin">Jane Doe</p>
-                                </ListItem>
+                                {
+                                    userData?.following?.map((creator, key) => (
+                                        <ListItem key={key} className="no-margin no-padding">
+                                            <Person style={{ marginRight: '.5rem' }} />
+                                            <b className="no-margin">{creator?.lastName} {creator?.firstName}</b>
+                                        </ListItem>
+                                    ))
+                                }
                             </List>
                         </div>
 
 
                     </div>
                 </Grid>
+                
                 { isPhone && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar">
                     <div className="MuiAppBar-positionSticky" style={{ top: '120px' }}>
 
@@ -202,6 +209,6 @@ const NewsFeed = ({ general, fetchAll, user, addToCart }) => {
 const mapStateToProps = ({ general, user }) => ({ general, user })
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ fetchAll, addToCart }, dispatch)
+    return bindActionCreators({ fetchNewsFeeds, fetchUsers, addToCart }, dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(NewsFeed)

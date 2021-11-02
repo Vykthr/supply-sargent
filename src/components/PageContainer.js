@@ -7,7 +7,7 @@ import { CircularProgress, Grid, LinearProgress } from '@material-ui/core'
 
 const PageContainer = ({ secondary = false, pageTitle, type = '', account, noBgPadding, transparentHeader, ...props }) => {
     return (
-        <div className={ secondary && "bg"} style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className={ secondary ? "bg" : ""} style={{ display: 'flex', flexDirection: 'column' }}>
             <Header secondary={secondary} type={type} transparentHeader={transparentHeader || secondary} logo={props?.logo || ''}/>
 
             {
@@ -38,7 +38,7 @@ const PageContainer = ({ secondary = false, pageTitle, type = '', account, noBgP
                     {
                         props.pageTitle && <h1 className="pageTitle">{props.pageTitle}</h1>
                     }
-                    <div className={!props?.noBg && "bg" } style={{ padding: !noBgPadding && '1rem 2rem', flex: 1 }}>
+                    <div className={!props?.noBg ? "bg" : "" } style={{ padding: !noBgPadding && '1rem 2rem', flex: 1 }}>
                         {props.children}
                     </div>
                 </>

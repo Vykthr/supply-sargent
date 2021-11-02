@@ -1,26 +1,32 @@
-import { Grid, ListItem, Button, TextField, InputAdornment, IconButton, FormControl, FormControlLabel, Checkbox, FormGroup, List, Paper } from '@material-ui/core'
+import { Grid, Button, TextField} from '@material-ui/core'
 import React, { useState, useEffect } from 'react'
 import PageContainer from '../components/PageContainer'
 import ProductCard from '../components/ProductCard'
-import { Search, Person } from '@material-ui/icons'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
-import { fetchAll } from '../redux/actions/general';
+import { fetchProducts } from '../redux/actions/general';
 import { addToCart } from '../redux/actions/user';
 import { Link, useHistory } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
+import AddProduct from '../components/AddProduct'
+import { formatNumber } from '../util'
 
-const MarketPlace = ({ general, fetchAll, addToCart }) => {
+const MarketPlace = ({ general, fetchProducts, addToCart, user }) => {
     const history = useHistory()
     const [ categories, setCategories ] = useState([])
-    const [ categoriesHeight, setCategoriesHeight ] = useState('200px')
     const [ products, setProducts ] = useState(general.products)
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
-    const isTab = useMediaQuery({ query: '(max-width: 1200px)' })
+    const [ openDialog, setOpenDialog ] = useState(false)
+    const [ processing, setProcessing ] = useState(false)
+    const [ userData, setUserData ] = useState({})
 
     useEffect(() => {
         updateAll();
     }, [general])
+
+    useEffect(() => {
+        setUserData(user?.userData || {});
+    }, [user])
 
     const updateAll = () => {
         if(general.utilities?.hasOwnProperty('categories')) {
@@ -30,7 +36,13 @@ const MarketPlace = ({ general, fetchAll, addToCart }) => {
     }
 
     const init = async () => {
-        await fetchAll();
+        setProcessing(true)
+        try {
+            await fetchProducts();
+        }
+        finally {
+            setProcessing(false)
+        }
     }
 
     const goto = (link) => {
@@ -38,12 +50,13 @@ const MarketPlace = ({ general, fetchAll, addToCart }) => {
     }
 
     useEffect(() => {
-        init();
-    }, [])
+        if(!openDialog) init()
+    }, [openDialog])
+
     
     
     return (
-        <PageContainer logo="dark">
+        <PageContainer logo="dark" processing={processing}>
             <Grid container>
                 { !isPhone && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar">
                     <div className="MuiAppBar-positionSticky" style={{ top: '120px' }}>
@@ -89,7 +102,7 @@ const MarketPlace = ({ general, fetchAll, addToCart }) => {
             
                 <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar right">
                     <div className="MuiAppBar-positionSticky" style={{  top: '120px' }}>
-                        <Button className="btn" color="primary" variant="contained" fullWidth>
+                        <Button className="btn" color="primary" variant="contained" fullWidth fullWidth onClick={() => setOpenDialog(true)}>
                             Upload an Product
                         </Button>
 
@@ -107,10 +120,12 @@ const MarketPlace = ({ general, fetchAll, addToCart }) => {
                         <div className="section wt-bg">
                             <h4 className="sectionTitle">Wallet Balance</h4>
 
-                            <h4 className="sectionTitle price">$0.00<sub>TTD</sub></h4>
-                            <Button className="btn red" color="primary" variant="contained" fullWidth>
-                                Go to wallet
-                            </Button>
+                            <h4 className="sectionTitle price">${formatNumber(userData.balance)}<sub>TTD</sub></h4>
+                            <Link to="/account/wallet">
+                                <Button className="btn red" color="primary" variant="contained" fullWidth>
+                                    Go to wallet
+                                </Button>
+                            </Link>
 
                             <label className="sectionTitle form-label">Vendors</label>
                             <TextField select SelectProps={{ native: true, style: { height: '40px' } }} variant="outlined" fullWidth >
@@ -160,14 +175,16 @@ const MarketPlace = ({ general, fetchAll, addToCart }) => {
 
                     </div>
                 </Grid> }
+
+                <AddProduct categories={categories} open={openDialog} setOpenDialog={setOpenDialog} user={userData?.email || null} freeTrial={userData?.freeTrial || null} />
             </Grid>
         </PageContainer>
     )
 }
 
-const mapStateToProps = ({ general }) => ({ general })
+const mapStateToProps = ({ general, user }) => ({ general, user })
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ fetchAll, addToCart }, dispatch)
+    return bindActionCreators({ fetchProducts, addToCart }, dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MarketPlace)

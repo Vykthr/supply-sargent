@@ -34,6 +34,7 @@ const AddFeed = ({ open = false, user = null, freeTrial = false, setOpenDialog }
             user: user, caption: '', image: ''
     
         })
+        setError('')
         try {
             setProcessing(true)
             const res = await userApi.getActivePermits(user)

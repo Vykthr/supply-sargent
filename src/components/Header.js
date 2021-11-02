@@ -109,7 +109,7 @@ const Header = ({ type, user, logo = '', transparentHeader = false, secondary = 
                         }
                         
                         <ListItem>
-                            <Link  style={{ textTransform: 'capitalize', color: '#212529', fontWeight: '600' }} onClick={() => handleRequest()}>
+                            <Link to="#" style={{ textTransform: 'capitalize', color: '#212529', fontWeight: '600' }} onClick={() => handleRequest()}>
                                 { userDetails.authenticated ? 'Logout' : 'Login' }
                             </Link>
                         </ListItem>

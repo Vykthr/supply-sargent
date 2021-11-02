@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from 'react'
-import { Grid, Button, IconButton, Avatar } from '@material-ui/core'
+import { Grid, Button, Avatar } from '@material-ui/core'
 import { useMediaQuery } from 'react-responsive'
-import { ThumbUpAlt, Grade, PersonAdd, Remove, Add } from '@material-ui/icons'
 import { connect } from 'react-redux'
 
 const NewsCard = ({ news, general, user }) => {
-    const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
-    const isTab = useMediaQuery({ query: '(max-width: 1200px)' })
+    const [ allUsers, setAllUsers ] = useState(general.users)
+
+    useEffect(() => {
+        setAllUsers(general.users)
+    }, [general])
+
+    const getUserDetails = (email, property) => {
+        const user = allUsers.find((usr) => usr.email === email)
+        return Boolean(user) ? (property === 'name') ? user?.lastName + ' ' + user?.firstName : (property === 'followers') ? user?.followers?.length : user[property] : '';
+    }
 
     return (
-        <Grid xs={12} container className="news-card">
+        <Grid xs={12} item container className="news-card">
             <Grid xs={12} item className="wt-bg">
-                <Grid container alignItems="center" spacing={2}>
+                <Grid  container alignItems="center" spacing={2}>
                     <Grid item>
-                        <Avatar source={news.photoImage} />
+                        <Avatar source={getUserDetails(news.user, 'image')} />
                     </Grid>
                     <Grid item xs={8} md={5}>
-                        <p className="name">{news.name}</p>
+                        <p className="name">{getUserDetails(news.user, 'name')}</p>
                         <p className="email">{news.user}</p>
                     </Grid>
                     <Grid item container xs={12} md={6} className="actions" spacing={2}>
@@ -25,7 +32,7 @@ const NewsCard = ({ news, general, user }) => {
                             <Button color="primary" fullWidth variant="contained">Like</Button>
                         </Grid>
                         <Grid item xs={3}>
-                            <p>{news?.followers?.length || 0}</p>
+                            <p>{getUserDetails(news.user, 'followers') || 0}</p>
                             <Button color="primary" fullWidth variant="contained">Follow</Button>
                         </Grid>
                         <Grid item xs={3}>
