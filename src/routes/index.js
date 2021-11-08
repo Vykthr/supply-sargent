@@ -7,7 +7,7 @@ import NewsFeed from '../pages/NewsFeed';
 import { bindActionCreators } from 'redux';
 import { logoutUser } from '../redux/actions/user.js'
 import firebase from '../redux/api/config'
-import { updateProfile } from '../redux/actions/user'
+import { updateProfile, fetchChats } from '../redux/actions/user'
 import { fetchAll } from '../redux/actions/general'
 import MarketPlace from '../pages/MarketPlace';
 import BecomeAVendor from '../pages/BecomeAVendor';
@@ -16,6 +16,9 @@ import Advertise from '../pages/Advertise';
 import BecomeAContentCreator from '../pages/BecomeAContentCreator';
 import Auth from '../pages/Auth';
 import AccountRoutes from './AccountRoutes';
+import Product from '../pages/Product';
+import Profile from '../pages/Profile';
+import Messages from '../pages/private/Messages';
 
 const ScrollToTop = () => {
     const history = useHistory();
@@ -28,13 +31,14 @@ const ScrollToTop = () => {
 
 const ResetScroll = withRouter(ScrollToTop);
 
-const Routes = ({ user, logoutUser, updateProfile, fetchAll }) => {
+const Routes = ({ user, logoutUser, updateProfile, fetchAll, fetchChats }) => {
     const init = async () => {
         AOS.init()
         try {
             await fetchAll();
             if(user?.userData?.hasOwnProperty('email')) {
-                await updateProfile(user.userData.email)
+                await updateProfile(user.userData.email);
+                await fetchChats(user.userData.email);
             }
         }
         finally {
@@ -78,6 +82,10 @@ const Routes = ({ user, logoutUser, updateProfile, fetchAll }) => {
                 <Route exact path="/advertise" component={Advertise} />
                 
                 <PrivateRoute path="/account" component={AccountRoutes} />
+                <PrivateRoute path="/messages" component={Messages} />
+                <PrivateRoute path="/messages/:email" component={Messages} />
+                <Route path="/product/:slug" component={Product} />
+                <Route path="/profile/:email" component={Profile} />
 
                 <Route path="*">
                     <Home />
@@ -90,7 +98,7 @@ const Routes = ({ user, logoutUser, updateProfile, fetchAll }) => {
 const mapStateToProps = ({ user }) => ({ user })
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ logoutUser, updateProfile, fetchAll }, dispatch)
+    return bindActionCreators({ logoutUser, updateProfile, fetchAll, fetchChats }, dispatch)
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Routes);

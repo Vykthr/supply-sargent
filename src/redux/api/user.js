@@ -19,8 +19,8 @@ export default {
     logoutUser() {
         return firebase.auth().signOut();
     },
-    resetPassword(payload) {
-        return firebase.auth().sendPasswordResetEmail(payload.email);
+    resetPassword(email) {
+        return firebase.auth().sendPasswordResetEmail(email);
     },
 
     updateProfile(email, payload) {
@@ -53,5 +53,10 @@ export default {
         return firebase.firestore().collection(`products`).add({
             ...payload, added
         })
+    },
+
+    async fetchChats(email) {
+        const res = await firebase.firestore().collection(`chats`).where('participants', 'array-contains', email).get();
+        return res.docs.map((doc) => { return { ...doc.data(), chatId: doc.id }});
     }
 };

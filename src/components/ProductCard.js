@@ -1,41 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { Grid, Button, IconButton } from '@material-ui/core'
-import { useMediaQuery } from 'react-responsive'
-import { ThumbUpAlt, Grade, PersonAdd, Remove, Add } from '@material-ui/icons'
+import React from 'react'
+import { Grid} from '@material-ui/core'
 import { connect } from 'react-redux'
 
 import tick from '../assets/images/tick.svg'
 import choice from '../assets/images/choice.svg'
 import badge from '../assets/images/badge.svg'
+import { Link } from 'react-router-dom'
 
-const ProductCard = ({ product, general, addToCart, user }) => {
-    const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
-    const isTab = useMediaQuery({ query: '(max-width: 1200px)' })
-    const [ cartList, setCartList ] = useState(user.cartList)
-    const [ quantity, setCartQuantity ] = useState(0)
-
-    const addToCartList = async (remove = false) => {
-        let newCart = [ ...cartList ]
-        const index = newCart.map(({ id }) => id).indexOf(product.id)
-        if(index > -1) {
-            newCart[index].quantity += 1;
-        } else {
-            newCart.push({ ...product, quantity: 1 });
-        }
-        await addToCart(newCart)
-    }
-
-    useEffect(() => {
-        setCartList(user.cartList)
-    }, [user])
-
-    const getQuantity = () => {
-        const prod = cartList.find(({ id }) => product.id === id)
-        return prod?.quantity || 0
-    }
-
+const ProductCard = ({ product }) => {
     return (
-        // <Link to>
+        <Link to={`/product/${product?.slug || ''}`}>
             <Grid item xs={12} md={4} container className="product-card">
                 <Grid item xs={12} container className="section wt-bg">
                     <Grid item xs={12}>
@@ -46,15 +20,15 @@ const ProductCard = ({ product, general, addToCart, user }) => {
                         <h5>By {product.seller}</h5>
                         <p>${product.price} <sup>PER {product.value}</sup></p>
                     </Grid>
-                    <Grid className="icons" item xs={12} container alignItems="center" direction="row" wrap="nowrap">
-                        <img src={choice} />
-                        <img src={tick} />
-                        <img src={tick} />
-                        <img src={badge} />
+                    <Grid className="icons"  spacing={1} item xs={12} container alignItems="center" direction="row" wrap="nowrap">
+                        <Grid item xs={5}><img src={choice} /></Grid>
+                        <Grid item xs={2}><img src={tick} /></Grid>
+                        <Grid item xs={2}><img src={tick} /></Grid>
+                        <Grid item xs={2}><img src={badge} /></Grid>
                     </Grid>
                 </Grid>
             </Grid>
-        // </Link>
+        </Link>
     )
 }
 

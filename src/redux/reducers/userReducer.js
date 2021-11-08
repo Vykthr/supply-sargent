@@ -1,11 +1,12 @@
-import { USER_LOGOUT, USER_LOGIN, USER_UPDATE, UPDATE_CART } from "../actions/constants";
+import { USER_LOGOUT, USER_LOGIN, USER_UPDATE, UPDATE_CART, UPDATE_CHAT_LIST } from "../actions/constants";
 
 const userData = JSON.parse(localStorage.getItem("supply-sargent"));
 
 const defaultState = {
   authenticated: !!userData,
   userData: userData,
-  cartList: []
+  cartList: [],
+  chatList: [],
 };
 
 export default (state = defaultState, action) => {
@@ -18,6 +19,8 @@ export default (state = defaultState, action) => {
       return { ...state, userData: action.payload };
     case UPDATE_CART:
       return { ...state, cartList: action.payload };
+    case UPDATE_CHAT_LIST:
+      return { ...state, chatList: action.payload };
     default:
       return state;
   }

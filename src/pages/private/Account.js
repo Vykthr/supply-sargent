@@ -1,14 +1,9 @@
-import { Divider, Grid, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import React, { useEffect, useState } from 'react'
 import PageContainer from '../../components/PageContainer';
-import Dashlet from '../../components/profile/Dashlet';
-import { Dashboard, AccountBalanceWallet, Settings, ShoppingCart, ShoppingBasket, ListAlt, Message, PermContactCalendar, ExitToApp } from '@material-ui/icons'
+import { Person, Chat } from '@material-ui/icons'
 import { useMediaQuery } from 'react-responsive'
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import Permits from '../../components/profile/Permits';
-import Wallet from '../../components/profile/Wallet';
-import Products from '../../components/profile/Products';
-import EditProduct from '../../components/profile/EditProduct';
 import { logoutUser } from '../../redux/actions/user';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -45,9 +40,27 @@ const Account = ({ logoutUser, ...props}) => {
         <PageContainer type="profile" transparentHeader noBgPadding>
             <Grid container>
                 <Grid container item xs={12} lg={4} style={{ padding: '8rem 2rem 2rem' }}>
+                    <Grid xs={12} sm={6} item style={{ padding: '1rem' }}>
+                        <Link to={`/account/profile`}>
+                            <div className="dash-let">
+                                {/* <img src={link.icon} /> */}
+                                <Person style={{ width: '110px', height: '110px' }} />
+                                <p>Profile</p>
+                            </div>
+                        </Link>
+                    </Grid>
+                    <Grid xs={12} sm={6} item style={{ padding: '1rem' }}>
+                        <Link to={`/messages`}>
+                            <div className="dash-let">
+                                {/* <img src={link.icon} /> */}
+                                <Chat style={{ width: '110px', height: '110px' }} />
+                                <p>Messages</p>
+                            </div>
+                        </Link>
+                    </Grid>
                     {
                         links.map((link, key) => (
-                            <Grid key={key} xs={6} item style={{ padding: '1rem' }}>
+                            <Grid key={key} xs={12} sm={6} item style={{ padding: '1rem' }}>
                                 <Link to={`/account/${link.link}`}>
                                     <div className="dash-let">
                                         <img src={link.icon} />

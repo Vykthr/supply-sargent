@@ -1,4 +1,4 @@
-import { USER_LOGIN, USER_LOGOUT, USER_UPDATE, UPDATE_CART } from "./constants";
+import { USER_LOGIN, USER_LOGOUT, USER_UPDATE, UPDATE_CART, UPDATE_CHAT_LIST } from "./constants";
 import userApi from "../api/user";
 import moment from 'moment'
 
@@ -53,6 +53,21 @@ export const addToCart = (cartList) => {
           payload: cartList,
         });
         return Promise.resolve(cartList);
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  };
+};
+
+export const fetchChats = (email) => {
+  return async (dispatch) => {
+    try {
+        const chats = await userApi.fetchChats(email);
+        await dispatch({
+          type: UPDATE_CHAT_LIST,
+          payload: chats,
+        });
+        return Promise.resolve(chats);
     } catch (error) {
       return Promise.reject(error);
     }

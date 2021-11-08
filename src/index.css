@@ -1,6 +1,47 @@
 *{
     box-sizing: border-box;
 }
+.loader {
+    background-color: #093028 !important;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    left: 0;
+    z-index: 9999999;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+.chat-time span{
+    font-size: 75%;
+}
+.loader .MuiLinearProgress-indeterminate {
+    width: 20%;
+}
+.loader img {
+    -webkit-animation: fadeinout 2s infinite forwards;
+    animation: fadeinout 2s infinite forwards;
+    width: 15%;
+    margin-bottom: 2rem;
+}
+@media(max-width: 950px) {
+    .loader img {
+        width: 20%;
+    }    
+}
+
+@-webkit-keyframes fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+@keyframes fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}
 option, select {
     text-transform: capitalize;
 }
@@ -192,6 +233,12 @@ h6.sectionTitle {
 
 .btn.red, .btn.red:hover {
     background-color: #D10404;
+    color: #FFF;
+}
+
+.btn.green, .btn.green:hover {
+    background-color: #00AD2B;
+    color: #FFF;
 }
 
 button.btn, a.btn {
@@ -262,7 +309,7 @@ p.rating {
     padding: .5rem 1.3rem;
 }
 .product-card .icons img {
-    margin: 0 .2rem 0;
+    width: 100%;
 }
 
 .news-card {
@@ -398,8 +445,8 @@ div.form-control {
     cursor: pointer;
 }
 .dash-let img {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
 }
 .dash-let p {
     margin: .2rem 0 0;
@@ -595,6 +642,14 @@ div.form-control {
 }
 .product-form > div, .product-form > div.images > div {
     padding: .5rem;
+}
+.prod-details p span{
+    color: #D10404;
+}
+.prod-details p {
+    text-transform: capitalize;
+    font-weight: 600;
+    margin: .5rem 0;
 }
 .image-holder {
     transition: .3s;

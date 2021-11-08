@@ -16,6 +16,7 @@ const MarketPlace = ({ general, fetchProducts, addToCart, user }) => {
     const [ categories, setCategories ] = useState([])
     const [ products, setProducts ] = useState(general.products)
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
+    const isDesktop = useMediaQuery({ query: '(min-width: 1220px)' })
     const [ openDialog, setOpenDialog ] = useState(false)
     const [ processing, setProcessing ] = useState(false)
     const [ userData, setUserData ] = useState({})
@@ -57,10 +58,9 @@ const MarketPlace = ({ general, fetchProducts, addToCart, user }) => {
     
     return (
         <PageContainer logo="dark" processing={processing}>
-            <Grid container>
-                { !isPhone && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar">
+            <Grid container spacing={2}>
+                { isDesktop && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar MuiAppBar-positionSticky" style={{ top: '120px' }}>
                     <div className="MuiAppBar-positionSticky" style={{ top: '120px' }}>
-
                         <div className="section wt-bg">
                             <h4 className="sectionTitle bigger">Do you want to become a vendor?</h4>
                             <Button onClick={() => goto('/become-a-vendor')} className="btn red" color="primary" variant="contained" fullWidth>
@@ -88,11 +88,10 @@ const MarketPlace = ({ general, fetchProducts, addToCart, user }) => {
                         </div>
 
                         <small style={{ color: '#fff', display: 'block' }}>Copyright © 2021 Supply Sargent LLC - All Rights Reserved</small>
-
                     </div>
                 </Grid> }
                 
-                <Grid item xs={12} md={9} lg={8} container spacing={2} style={{ padding: isPhone ? 0 : '1rem' }}>
+                <Grid item xs={12} md={9} lg={8} container spacing={2} style={{ paddingTop: isPhone ? 'inherit' : '35px' }}>
                     {
                         products.map((product, key) => (
                             <ProductCard addToCart={addToCart} key={key} product={product} />
@@ -101,9 +100,9 @@ const MarketPlace = ({ general, fetchProducts, addToCart, user }) => {
                 </Grid>
             
                 <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar right">
-                    <div className="MuiAppBar-positionSticky" style={{  top: '120px' }}>
+                    <div className="MuiAppBar-positionSticky" style={{ top: '120px' }}>
                         <Button className="btn" color="primary" variant="contained" fullWidth fullWidth onClick={() => setOpenDialog(true)}>
-                            Upload an Product
+                            Upload a Product
                         </Button>
 
                         <Button className="btn white" color="inherit" variant="contained" fullWidth>
@@ -137,43 +136,37 @@ const MarketPlace = ({ general, fetchProducts, addToCart, user }) => {
                                 placeholder="Ex. 10km"
                             />
                         </div>
-
-
                     </div>
                 </Grid>
                 
-                { isPhone && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar">
-                    <div className="MuiAppBar-positionSticky" style={{ top: '120px' }}>
-
-                        <div className="section wt-bg">
-                            <h4 className="sectionTitle bigger">Do you want to become a vendor?</h4>
-                            <Button onClick={() => goto('/become-a-vendor')} className="btn red" color="primary" variant="contained" fullWidth>
-                                Learn More
-                            </Button>
-                        </div>
-
-                        <div className="section wt-bg">
-                            <h4 className="sectionTitle bigger">Request your prime orders</h4>
-                            <Link to="prime-orders">
-                                <Button className="btn red" color="primary" variant="contained" fullWidth>
-                                    Learn more
-                                </Button>
-                            </Link>
-                        </div>
-
-                        <div className="section wt-bg">
-                            <h4 className="sectionTitle bigger">Advertise Now!</h4>
-                            <h6 className="sectionTitle">Increase Sales <br/> Increase Traffic</h6>
-                            <Link to="advertise">
-                                <Button className="btn red" color="primary" variant="contained" fullWidth>
-                                    Learn more
-                                </Button>
-                            </Link>
-                        </div>
-
-                        <small style={{ color: '#fff', display: 'block' }}>Copyright © 2021 Supply Sargent LLC - All Rights Reserved</small>
-
+                { !isDesktop && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar">
+                    <div className="section wt-bg">
+                        <h4 className="sectionTitle bigger">Do you want to become a vendor?</h4>
+                        <Button onClick={() => goto('/become-a-vendor')} className="btn red" color="primary" variant="contained" fullWidth>
+                            Learn More
+                        </Button>
                     </div>
+
+                    <div className="section wt-bg">
+                        <h4 className="sectionTitle bigger">Request your prime orders</h4>
+                        <Link to="prime-orders">
+                            <Button className="btn red" color="primary" variant="contained" fullWidth>
+                                Learn more
+                            </Button>
+                        </Link>
+                    </div>
+
+                    <div className="section wt-bg">
+                        <h4 className="sectionTitle bigger">Advertise Now!</h4>
+                        <h6 className="sectionTitle">Increase Sales <br/> Increase Traffic</h6>
+                        <Link to="advertise">
+                            <Button className="btn red" color="primary" variant="contained" fullWidth>
+                                Learn more
+                            </Button>
+                        </Link>
+                    </div>
+
+                    <small style={{ color: '#fff', display: 'block' }}>Copyright © 2021 Supply Sargent LLC - All Rights Reserved</small>
                 </Grid> }
 
                 <AddProduct categories={categories} open={openDialog} setOpenDialog={setOpenDialog} user={userData?.email || null} freeTrial={userData?.freeTrial || null} />

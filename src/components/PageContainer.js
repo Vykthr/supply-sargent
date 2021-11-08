@@ -3,7 +3,8 @@ import Header from './Header'
 import Footer from './Footer'
 import Logo from '../assets/images/whitelogo.png'
 import World from '../assets/images/world.png'
-import { CircularProgress, Grid, LinearProgress } from '@material-ui/core'
+import { Grid, LinearProgress } from '@material-ui/core'
+import Loader from './Loader'
 
 const PageContainer = ({ secondary = false, pageTitle, type = '', account, noBgPadding, transparentHeader, ...props }) => {
     return (
@@ -11,7 +12,8 @@ const PageContainer = ({ secondary = false, pageTitle, type = '', account, noBgP
             <Header secondary={secondary} type={type} transparentHeader={transparentHeader || secondary} logo={props?.logo || ''}/>
 
             {
-                props.processing && <LinearProgress color="primary" />
+                // props.processing && <LinearProgress color="primary" />
+                props.processing && <Loader />
             }
             {
                 secondary ?

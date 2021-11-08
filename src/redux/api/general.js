@@ -19,10 +19,15 @@ export default {
     },
     async addProduct({ images, ...payload }) {
         var id = '';
+        let slug = payload.name.replaceAll(' ', '-').toLowerCase();
+        const slugs = await firebase.firestore().collection('products').where('slug', '>=', slug).get()
+        if(!slugs.empty) {
+            slug = `${slug}-${slugs.docs.length || slugs.size}`
+        }
         await new Promise(async (resolve, reject) => {
             const created = Date.now()
             var imgs = []
-            await firebase.firestore().collection('products').add({ ...payload, active: true, created  }).then(async (res) => {
+            await firebase.firestore().collection('products').add({ ...payload, active: true, slug, created  }).then(async (res) => {
                 id = res.id;
                 const newObj = images.filter((img) => typeof(img) != 'string' );
                 if(newObj.length == 0) {
@@ -81,13 +86,48 @@ export default {
             })
         })
     },
+    async editFeed({ image, id, ...payload }) {
+        const updated = Date.now()
+        await new Promise(async (resolve, reject) => {
+            await firebase.firestore().doc(`news-feeds/${id}`).update({ ...payload, updated }).then(async (res) => {
+                if(typeof(image) === 'object') {
+                    const imageRef = firebase.storage().ref().child(`news-feeds/${id}/image`)
+                    await imageRef.put(image, { contentType: 'image/jpeg' }).then(async () => {
+                        await imageRef.getDownloadURL().then(async (downloadURL) => {
+                            await firebase.firestore().doc(`news-feeds/${id}`).update({ image: downloadURL })
+                            resolve()
+                        });
+                    })
+                } else {
+                    resolve()
+                }
+            })
+        })
+    },
+    async deleteFeed(id) {
+        await new Promise(async (resolve, reject) => {
+            await firebase.firestore().doc(`news-feeds/${id}`).delete().then(() => {
+                const imageRef = firebase.storage().ref().child(`news-feeds/${id}/image`)
+                imageRef.delete();
+                resolve();
+            })
+        })
+    },
     async getNewsFeeds(per_page = 100) {
         const res = await firebase.firestore().collection(`news-feeds`).orderBy("added").get()
+        return res.docs.map((doc) => { return { ...doc.data(), id: doc.id }})
+    },
+    async getUserFeeds(email, per_page = 100) {
+        const res = await firebase.firestore().collection(`news-feeds`).where('user', '==', email).orderBy("added").get()
         return res.docs.map((doc) => doc.data())
     },
     async getPermits() {
         const res = await firebase.firestore().collection(`permits`).where('expires', '>', Date.now()).where('id', '==', 1).get();
         return res.docs.map((doc) => doc.data())
+    },
+    async getProduct(slug) {
+        const res = await firebase.firestore().collection(`products`).where('slug', '==', slug).get();
+        return res?.docs?.[0]?.data() || {}
     },
 };
 

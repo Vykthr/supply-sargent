@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import generalApi from '../redux/api/general';
 import userApi from '../redux/api/user';
 
-const AddFeed = ({ open = false, user = null, freeTrial = false, setOpenDialog }) => {
+const AddFeed = ({ open = false, user = null, freeTrial = false, closeModal, edit = null }) => {
     const [ activePermits, setActivePermits] = useState([])
     const [ processing, setProcessing] = useState(false)
     const [ uploading, setUploading ] = useState(false)
@@ -30,21 +30,26 @@ const AddFeed = ({ open = false, user = null, freeTrial = false, setOpenDialog }
     }
 
     const init = async () => {
-        setForm({
-            user: user, caption: '', image: ''
-    
-        })
-        setError('')
-        try {
-            setProcessing(true)
-            const res = await userApi.getActivePermits(user)
-            console.log(res)
-            setActivePermits(res)
-        }
-        catch (err) {
-            console.log(err)
-        } finally {
-            setProcessing(false)
+        if(Boolean(edit)) {
+            setForm({
+                ...edit
+            })
+        } else {
+            setForm({
+                user: user, caption: '', image: ''
+        
+            })
+            setError('')
+            try {
+                setProcessing(true)
+                const res = await userApi.getActivePermits(user)
+                setActivePermits(res)
+            }
+            catch (err) {
+                console.log(err)
+            } finally {
+                setProcessing(false)
+            }
         }
     }
 
@@ -53,9 +58,15 @@ const AddFeed = ({ open = false, user = null, freeTrial = false, setOpenDialog }
         if(form.caption && form.user && form.image !== '') {
             try {
                 setUploading(true)
-                const res = await generalApi.addFeed(form);
-                alert('Successfully uploaded new feed')
-                setOpenDialog(false)
+                if(Boolean(edit)) {
+                    const res = await generalApi.editFeed(form);
+                    alert('Successfully updated news feed')
+                    closeModal()
+                } else {
+                    const res = await generalApi.addFeed(form);
+                    alert('Successfully uploaded new feed')
+                    closeModal()
+                }
             }
             catch(err) {
                 console.log(err)
@@ -89,7 +100,7 @@ const AddFeed = ({ open = false, user = null, freeTrial = false, setOpenDialog }
                         <p>Click <Link className="text-primary" to="/login">here</Link> to login or <Link className="text-primary" to="/sign-up">create an account</Link></p>
                     </>
                     :
-                    (freeTrial || Boolean(activePermits.find((active) => active?.id == 1))) ?
+                    (freeTrial || Boolean(activePermits.find((active) => active?.id == 1)) || Boolean(edit)) ?
                     <div>
                         <h3 className="text-center">Upload Content</h3>
                         <input type="file" hidden name="image" ref={imageRef} onChange={(e) => handleImage(e.target)} />
@@ -97,10 +108,10 @@ const AddFeed = ({ open = false, user = null, freeTrial = false, setOpenDialog }
                             <Grid item xs={12}>
                                 <div onClick={() => imageRef.current.click()}  style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100px', height: 'auto', border: '1px solid #093028', cursor: 'pointer' }}>
                                     {
-                                        typeof(form.image) === 'string' ?
+                                        form.image === '' ?
                                         <CameraAltRounded style={{ margin: '1rem' }} />
                                         :
-                                        <img src={URL.createObjectURL(form.image)} style={{ width: '100%', height: 'auto' }} />
+                                        <img src={typeof(form.image) === 'string' ? form.image : URL.createObjectURL(form.image)} style={{ width: '100%', height: 'auto' }} />
                                     }
                                 </div>
                             </Grid>
@@ -125,9 +136,9 @@ const AddFeed = ({ open = false, user = null, freeTrial = false, setOpenDialog }
                 }
             </DialogContent>
             <DialogActions style={{ margin: '0 1rem 1rem 0' }}>
-                <Button onClick={() => setOpenDialog(false)} className="btn red" variant="contained" color="primary">Close</Button>
-                { (!processing && (freeTrial || Boolean(activePermits.find((active) => active?.id == 1)))) && <Button onClick={() => upload()} className="btn" variant="contained" color="primary">{
-                    uploading ? <CircularProgress color="inherit" size={15} /> : 'Upload' }</Button> }
+                <Button onClick={() => closeModal()} className="btn red" variant="contained" color="primary">Close</Button>
+                { (!processing && (freeTrial || Boolean(edit) || Boolean(activePermits.find((active) => active?.id == 1)))) && <Button onClick={() => upload()} className="btn" variant="contained" color="primary">{
+                    uploading ? <CircularProgress color="inherit" size={15} /> : (Boolean(edit)) ? 'Update' : 'Upload' }</Button> }
             </DialogActions>
         </Dialog>
     )

@@ -4,12 +4,20 @@ import { Link } from 'react-router-dom';
 import generalApi from '../redux/api/general';
 import userApi from '../redux/api/user';
 import { AddAPhoto, CameraAlt, DeleteForever } from '@material-ui/icons';
+import LocationPicker from 'react-location-picker';
 
 const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialog, categories = [], product = {} }) => {
     const [ activePermits, setActivePermits] = useState([])
     const [ uploading, setUploading ] = useState(false)
     const [ currentPermits, setCurrentPermits ] = useState([])  
     const [ prod, setProd ] = useState({})
+    const [ location, setLocation ] = useState( {
+        address: "",
+        position: {
+            lat: 0,
+            lng: 0
+        }
+    })
     const [ isEdit, setIsEdit ] = useState(false)
     const [ processing, setProcessing ] = useState(false)
     const [ imageToUpload, setImageToUpload ] = useState(0)
@@ -93,7 +101,9 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
                     await generalApi.editProduct(prod.id, payload);
                 }
                 else {
+                    console.log('new')
                     await generalApi.addProduct(payload);
+
                 }                
                 setOpenDialog(false)
             } else {
@@ -106,6 +116,10 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
         }
     };
 
+    const handleLocationChange = ({ position, address = '', places }) => {
+        setLocation({ position, address });
+    }
+
     useEffect(() => {
         if(open === true) init()
     }, [open])
@@ -115,6 +129,26 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
         newImages = newImages.filter((img, ky) => ky !==key );
         handleFormChange({ name: 'images', value: newImages})
     }
+
+    const getLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const location = {
+                    position: {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    }
+                }
+                handleLocationChange(location);
+            });
+        } else {
+          alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    useEffect(() => {
+        getLocation()
+    }, [])
 
 
     return (
@@ -217,6 +251,15 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
                                         <option value="tridad">Tridad</option>
                                     </Select>
                                 </FormControl>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <LocationPicker
+                                    containerElement={ <div style={ {height: '100%'} } /> }
+                                    mapElement={ <div style={ {height: '400px'} } /> }
+                                    defaultPosition={location.position}
+                                    onChange={handleLocationChange}
+                                />
                             </Grid>
 
                             <Grid item xs={12} md={6}>

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { PRIMARY_COLOR } from '../styles/colors'
 import Logo from '../assets/images/whitelogo.png'
 import LogoDark from '../assets/images/SS-White-Logo.png'
-import { AppBar, Toolbar, Grid, Divider, Drawer, List, ListItem, IconButton } from '@material-ui/core'
-import { Menu, Search } from '@material-ui/icons'
+import { AppBar, Toolbar, Grid, Divider, Drawer, List, ListItem, IconButton, Badge } from '@material-ui/core'
+import { Menu, Search, ShoppingCart } from '@material-ui/icons'
 import { Link, useHistory } from 'react-router-dom';
 import { logoutUser } from '../redux/actions/user';
 import { useMediaQuery } from 'react-responsive'
@@ -41,7 +41,7 @@ const Header = ({ type, user, logo = '', transparentHeader = false, secondary = 
             // const childDiv = document.querySelector('#float #float-div')
             const scrollValue = document.documentElement.scrollTop || document.body.scrollTop
             if(scrollValue) { 
-                if(scrollValue > 100 ) {
+                if(scrollValue > 30 ) {
                     nav?.setAttribute('style', 'background: #fff'); 
                     // childDiv?.setAttribute('style', 'padding: 0 5%');
                 } else {
@@ -76,12 +76,20 @@ const Header = ({ type, user, logo = '', transparentHeader = false, secondary = 
                         <Grid item className="d-flex align-center">
                             { 
                                 !isPhone ?
-                                <ul className="d-flex">
+                                <ul className="d-flex" style={{ alignItems: 'center' }}>
                                     {
                                         links.map(({label, url, badge = null}, key) => (
                                             <li key={key}><Link to={url}>{label}{badge > 0 && <sup className="badge">{badge}</sup>}</Link></li>
                                         ))
                                     }
+                                    <li>
+                                        <Link to="/account/cart">
+                                            <IconButton color="default">
+                                                <Badge badgeContent={cartList?.length || 0} color="primary"><ShoppingCart style={{ color: '#000' }} /></Badge>
+                                            </IconButton>
+                                        </Link>
+                                    </li>
+
                                     <li><Search style={{ color: "#FFF" }} /></li>
                                 </ul>
                                 :

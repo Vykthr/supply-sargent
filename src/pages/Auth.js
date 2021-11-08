@@ -40,7 +40,7 @@ const Auth = ({ loginUser, logoutUser, user }) => {
         e.preventDefault()
         setResetError('')
         setMessage('')
-        if( resetEmail ) {
+        if(resetEmail) {
             setProcessing(true)
             try{
                 await userApi.resetPassword(resetEmail)
@@ -277,12 +277,15 @@ const Auth = ({ loginUser, logoutUser, user }) => {
                     <FormControl className="form-control">
                         <TextField type="email" variant="outlined"
                             placeholder="Enter Email Address"
-                            label="Email Address"
+                            label="Email Address" value={resetEmail}
                             onChange={(e) => setResetEmail(e.target.value)}
                         />
                     </FormControl>
                     {
                         resetError && <p className="error-text">{resetError}</p>
+                    }
+                    {
+                        message && <p className="success-text">{message}</p>
                     }
                     <Button style={{ width: '80%'}} variant="outlined" color="primary" className="btn" type="submit">
                         { processing ? <CircularProgress size={15} /> : "Reset Password"}
