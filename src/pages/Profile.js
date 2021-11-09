@@ -155,22 +155,22 @@ const Profile = ({ general, fetchNewsFeeds, fetchUsers, user }) => {
                 </Grid> }
                 
                 <Grid item xs={12} md={9} lg={8} container >
-                    <div style={{ padding: '1rem', width: '100%' }} className="news-card">
+                    <div style={{ padding: isTab ? 0 : '1rem', width: '100%' }} className="news-card">
                         <Grid xs={12} item container alignItems="center"className="wt-bg">
-                            <Grid item xs={1}> 
+                            <Grid item xs={2} md={1}> 
                                 <Avatar src={customUser?.image} variant="rounded" />
                             </Grid>
-                            <Grid item xs={5}> 
+                            <Grid item xs={10} md={5}> 
                                 <p className="name">{customUser?.lastName + ' ' + customUser?.firstName}</p>
                                 <p className="email">{customUser.email}</p>
                             </Grid>
-                            <Grid item xs={3} container spacing={1} alignItems="center"> 
+                            <Grid item xs={12} md={3} container spacing={1} alignItems="center"> 
                                 <Grid item xs={5}><img src={choice} /></Grid>
                                 <Grid item xs={2}><img src={tick} /></Grid>
                                 <Grid item xs={2}><img src={tick} /></Grid>
                                 <Grid item xs={2}><img src={badge} /></Grid>
                             </Grid>
-                            <Grid item xs={3} container spacing={2} className="actions">
+                            <Grid item xs={12} md={3} container spacing={2} className="actions">
                                 <Grid item xs={6}>
                                     <p>{customUser?.followers?.length || 0}</p>
                                     <Button color="primary" fullWidth variant="contained">

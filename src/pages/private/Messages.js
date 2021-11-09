@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { fetchChats } from '../../redux/actions/user';
 import { bindActionCreators } from 'redux';
+import userApi from '../../redux/api/user';
 
 const Messages = ({ general, user, fetchChats }) => {
     const history = useHistory()
@@ -33,16 +34,38 @@ const Messages = ({ general, user, fetchChats }) => {
     //     },
     // ]
     const [ activeChat, setActiveChat] = useState({})
-    const [ chats, setChats] = useState([])
+    const [ chats, setChats] = useState(user?.chats || [])
     const [ processing, setProcessing ] = useState(false)
     const isTab = useMediaQuery({ query: '(max-width: 990px)' })
 
     useEffect(() => {
         const email = history?.location?.pathname?.split('messages/')?.[1] || ''
         if(email) {
-            setActiveChat(chats[0])
+            checkChat(email)
         }
     }, [history])
+
+    const checkChat = async (email) => {
+        try {
+            const res = await userApi.fetchChats(user?.userData?.email);
+            const usr = await userApi.getUserData(email)
+            setChats([ ...chats, ...res ]);
+            const existingChat = res.find(({ participants = [] }) => participants.indexOf(email) > -1)
+            if(Boolean(existingChat)) setActiveChat({ ...existingChat, participant: usr.data(), user: user.userData.email, })
+            else {
+                const newChat = {
+                    participants: [ user?.userData?.email, email ],
+                    started: Date.now(),
+                    user: user.userData.email,
+                    participant: usr.data()
+                }
+                setActiveChat(newChat);
+                setChats([ ...chats, newChat ])
+            }
+        } finally {
+
+        }
+    }
 
     const truncate = (string) => {
         return (string.length > 35) ? `${string.substring(0, 35)}...` : string
@@ -54,22 +77,21 @@ const Messages = ({ general, user, fetchChats }) => {
                 <Grid item xs={isTab ? 12 : 4}>
                     <List className="chats">
                         {
-                            chats.map(({ user, messages }, key) => (
-                                <>
-                                    <ListItem key={key} button onClick={() => setActiveChat({user, messages})}>
+                            chats.map(({ participant, ...chat }, key) => (
+                                <div  key={key}>
+                                    <ListItem button onClick={() => setActiveChat({ ...chat, participant })}>
                                         <ListItemAvatar>
-                                            <Avatar>
-                                                <img src={user.image} alt="usr"/>
-                                            </Avatar>
+                                            <Avatar src={participant.image} />
                                         </ListItemAvatar>
-                                        <ListItemText primary={user.name} secondary={truncate(messages[messages.length - 1]?.message)} />
+                                        {/* <ListItemText primary={user.name} secondary={truncate(messages[messages.length - 1]?.message)} /> */}
+                                        <ListItemText primary={participant?.lastName + ' ' + participant?.firstName}  />
 
-                                        <ListItemSecondaryAction>
+                                        {/* <ListItemSecondaryAction>
                                             <ListItemText className="chat-time" primary={moment(messages[messages.length - 1]?.date).startOf('day').fromNow()} />
-                                        </ListItemSecondaryAction>
+                                        </ListItemSecondaryAction> */}
                                     </ListItem>
                                     <Divider />
-                                </>
+                                </div>
                             ))
                         }
                     </List>

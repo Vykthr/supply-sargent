@@ -55,6 +55,20 @@ export default {
         })
     },
 
+    async addMessage(payload) {
+        const added = Date.now()
+        return firebase.firestore().collection(`chats`).add({
+            ...payload, added
+        })
+    },
+
+    async newMessage({ id, ...payload }) {
+        const lastUpdated = Date.now()
+        return firebase.firestore().doc(`chats/${id}`).update({
+            ...payload, lastUpdated
+        })
+    },
+
     async fetchChats(email) {
         const res = await firebase.firestore().collection(`chats`).where('participants', 'array-contains', email).get();
         return res.docs.map((doc) => { return { ...doc.data(), chatId: doc.id }});

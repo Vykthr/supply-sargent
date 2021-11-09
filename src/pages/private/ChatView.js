@@ -3,9 +3,11 @@ import { Info, Send } from '@material-ui/icons';
 import React, { useState, useEffect } from 'react'
 import moment from 'moment'
 import PerfectScrollbar from 'react-perfect-scrollbar'
+import userApi from '../../redux/api/user';
 
 const ChatView = ({ chat }) => {
     const [ currentChat, setCurrentChat ] = useState(chat)
+    const [ message, setMessage ] = useState('')
 
     useEffect(() => {
         setCurrentChat(chat)
@@ -15,15 +17,40 @@ const ChatView = ({ chat }) => {
         return id === '123321' ? 'message right' : 'message left'
     }
 
+    const sendMessage = async () => {
+        if(message) {
+            try {
+                const msg = {
+                    message,
+                    from: currentChat.user,
+                }
+                const { participant, participants, user, started, lastMessage, ...messages } = currentChat
+
+                if(Object.keys(messages).length > 0) {
+                    await userApi.newMessage({ ...msg, id: currentChat.id, lastMessage: currentChat.user });
+                    setMessage('')
+                } else {
+                    await userApi.addMessage(msg).then((doc) => {
+                        setCurrentChat({ ...currentChat, id: doc.id, lastMessage: currentChat.user });
+                        setMessage('')
+                    });
+                }
+            }
+            catch {
+
+            }
+        }
+    }
+
     return (
         <div style={{ borderLeft: '2px solid #ddd', paddingLeft: '1rem' }}>
             {
-                Boolean(currentChat?.user) ?
+                Boolean(currentChat?.participants) ?
                 <>
                     <List>
                         <ListItem>
-                            <ListItemAvatar><Avatar> <img src={currentChat?.user?.image} /> </Avatar></ListItemAvatar>
-                            <ListItemText primary={currentChat?.user?.name} primaryTypographyProps={{ style: { fontWeight: 'bold' } }} />
+                            <ListItemAvatar><Avatar src={currentChat?.participant?.image} /></ListItemAvatar>
+                            <ListItemText primary={currentChat?.participant?.lastName + ' ' + currentChat?.participant?.firstName} primaryTypographyProps={{ style: { fontWeight: 'bold' } }} />
                         </ListItem>
                     </List>
                     <Divider />
@@ -38,14 +65,14 @@ const ChatView = ({ chat }) => {
                             }
                         </List>
                     </PerfectScrollbar>
-                    <FormControl className="chat-control">
-                        <TextField variant="outlined" fullWidth
+                    <form className="chat-control" onSubmit={(e) =>{ e.preventDefault(); sendMessage() }}>
+                        <TextField value={message} onChange={(e) => setMessage(e.target.value)} variant="outlined" fullWidth
                             placeholder="Type message here..."
                         />
-                        <IconButton>
+                        <IconButton type="submit">
                             <Send />
                         </IconButton>
-                    </FormControl>
+                    </form>
                 </>
                 :
                 <div style={{ minHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
