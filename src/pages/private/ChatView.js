@@ -24,14 +24,15 @@ const ChatView = ({ chat }) => {
                     message,
                     from: currentChat.user,
                 }
+                const key = Date.now();
                 const { participant, participants, user, started, lastMessage, ...messages } = currentChat
 
                 if(Object.keys(messages).length > 0) {
-                    await userApi.newMessage({ ...msg, id: currentChat.id, lastMessage: currentChat.user });
+                    await userApi.newMessage({ [key]: msg, id: currentChat.id, lastMessage: currentChat.user });
                     setMessage('')
                 } else {
-                    await userApi.addMessage(msg).then((doc) => {
-                        setCurrentChat({ ...currentChat, id: doc.id, lastMessage: currentChat.user });
+                    await userApi.addMessage({ [key]: msg, participants, started, lastMessage: currentChat.user }).then((doc) => {
+                        setCurrentChat({ ...currentChat, id: doc.id});
                         setMessage('')
                     });
                 }

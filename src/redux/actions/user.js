@@ -1,6 +1,7 @@
 import { USER_LOGIN, USER_LOGOUT, USER_UPDATE, UPDATE_CART, UPDATE_CHAT_LIST } from "./constants";
 import userApi from "../api/user";
 import moment from 'moment'
+import firebase from "../api/config";
 
 export const loginUser = (payload, checked) => {
   return async (dispatch) => {
@@ -62,12 +63,15 @@ export const addToCart = (cartList) => {
 export const fetchChats = (email) => {
   return async (dispatch) => {
     try {
-        const chats = await userApi.fetchChats(email);
-        await dispatch({
-          type: UPDATE_CHAT_LIST,
-          payload: chats,
+        firebase.firestore().collection(`chats`).where('participants', 'array-contains', email).onSnapshot(async (res) => {
+            const chats = res.docs.map((doc) => { return { ...doc.data(), chatId: doc.id }});
+            console.log(chats)
+            await dispatch({
+              type: UPDATE_CHAT_LIST,
+              payload: chats,
+            });
+            return Promise.resolve(chats);
         });
-        return Promise.resolve(chats);
     } catch (error) {
       return Promise.reject(error);
     }

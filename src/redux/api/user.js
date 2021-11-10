@@ -68,9 +68,4 @@ export default {
             ...payload, lastUpdated
         })
     },
-
-    async fetchChats(email) {
-        const res = await firebase.firestore().collection(`chats`).where('participants', 'array-contains', email).get();
-        return res.docs.map((doc) => { return { ...doc.data(), chatId: doc.id }});
-    }
 };
