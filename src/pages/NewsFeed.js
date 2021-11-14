@@ -1,35 +1,31 @@
-import { Grid, ListItem, Button, TextField, InputAdornment, IconButton, FormControl, FormControlLabel, Checkbox, FormGroup, List, Paper } from '@material-ui/core'
+import { Grid, ListItem, Button, List } from '@material-ui/core'
 import React, { useState, useEffect } from 'react'
 import PageContainer from '../components/PageContainer'
 import NewsCard from '../components/NewsCard'
-import { Search, Person } from '@material-ui/icons'
+import { Person } from '@material-ui/icons'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import { fetchNewsFeeds, fetchUsers } from '../redux/actions/general';
 import { addToCart } from '../redux/actions/user';
 import { Link } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
-import generalApi from '../redux/api/general'
 import AddFeed from '../components/AddFeed'
 import { useHistory } from 'react-router-dom'
+import Creators from '../components/Creators';
 
 const NewsFeed = ({ general, fetchNewsFeeds, fetchUsers, user }) => {
     const history = useHistory()
-    const [ creators, setCreators ] = useState([])
     const [ userData, setUserData ] = useState({})
     const [ fetching, setFetching ] = useState(false)
     const [ profile, setProfile ] = useState(false)
     const [ openDialog, setOpenDialog ] = useState(false)
     const [ news, setNews ] = useState([])
-    const [ users, setUsers ] = useState(general.users)
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
     const isDesktop = useMediaQuery({ query: '(min-width: 1220px)' })
     const isTab = useMediaQuery({ query: '(max-width: 1000px)' })
 
     const updateAll = async () => {
         await init()
-        await getCreators()
-
     }
 
     const init = async () => {
@@ -47,20 +43,7 @@ const NewsFeed = ({ general, fetchNewsFeeds, fetchUsers, user }) => {
         }
     }
 
-    const getCreators = async () => {
-        try{
-            setFetching(true)
-            const permits = await generalApi.getPermits()
-            setCreators(permits.map((permit) => users.find(usr => usr.email === permit.user)));
-            // setCreators(docs)
-        } 
-        catch(err) {
-            console.log(err)
-        }
-        finally {
-            setFetching(false)
-        }
-    }
+
 
     const handleNews = (news = []) => {
         if(profile) {
@@ -72,7 +55,6 @@ const NewsFeed = ({ general, fetchNewsFeeds, fetchUsers, user }) => {
 
     useEffect(() => {
         handleNews(general.news)
-        setUsers(general.users)
     }, [general, profile, userData])
 
     useEffect(() => {
@@ -151,17 +133,7 @@ const NewsFeed = ({ general, fetchNewsFeeds, fetchUsers, user }) => {
                         </Button>
 
                         <div className="section wt-bg pl-1 pr-1">
-                            <h4 className="sectionTitle">Content Creators</h4>
-                            <List>
-                                {
-                                    creators.map((creator, key) => (
-                                        <ListItem key={key} className="no-margin no-padding">
-                                            <Person style={{ marginRight: '.5rem' }} />
-                                            <b className="no-margin">{creator?.lastName} {creator?.firstName}</b>
-                                        </ListItem>
-                                    ))
-                                }
-                            </List>
+                            <Creators />
                         </div>
 
                         <div className="section wt-bg">

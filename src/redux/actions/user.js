@@ -26,24 +26,27 @@ export const loginUser = (payload, checked) => {
 };
 
 export const updateProfile = (email, payload = null) => {
-  return async (dispatch) => {
-    try {
-        if(payload) await userApi.updateProfile(email, payload);
-        const res = await userApi.getUserData(email);
-        let userData = res.data()
-        userData['freeTrial'] = userData?.registered ? 
-            (moment(userData?.registered).fromNow() < '3 Months ago') ? true : false            
-            : false
-        localStorage.setItem("supply-sargent", JSON.stringify(userData));
-        await dispatch({
-          type: USER_LOGIN,
-          payload: userData,
-        });
-        return Promise.resolve(userData);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
+    return async (dispatch) => {
+        try {
+            if(payload) await userApi.updateProfile(email, payload);
+            const res = await userApi.getUserData(email);
+            let userData = res.data()
+
+            const fromNow = moment(userData?.registered).add(3, 'M');
+
+            userData['freeTrial'] = userData?.registered ? Boolean(fromNow > userData?.registered) : false
+            
+            localStorage.setItem("supply-sargent", JSON.stringify(userData));
+            
+            await dispatch({
+                type: USER_UPDATE,
+                payload: userData,
+            });
+            return Promise.resolve(userData);
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    };
 };
 
 export const addToCart = (cartList) => {
@@ -54,24 +57,6 @@ export const addToCart = (cartList) => {
           payload: cartList,
         });
         return Promise.resolve(cartList);
-    } catch (error) {
-      return Promise.reject(error);
-    }
-  };
-};
-
-export const fetchChats = (email) => {
-  return async (dispatch) => {
-    try {
-        firebase.firestore().collection(`chats`).where('participants', 'array-contains', email).onSnapshot(async (res) => {
-            const chats = res.docs.map((doc) => { return { ...doc.data(), chatId: doc.id }});
-            console.log(chats)
-            await dispatch({
-              type: UPDATE_CHAT_LIST,
-              payload: chats,
-            });
-            return Promise.resolve(chats);
-        });
     } catch (error) {
       return Promise.reject(error);
     }

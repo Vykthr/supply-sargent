@@ -6,14 +6,17 @@ import moment from 'moment'
 import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchChats } from '../../redux/actions/user';
 import { bindActionCreators } from 'redux';
 import userApi from '../../redux/api/user';
+import { fetchUsers } from '../../redux/actions/general'
+import firebase from '../../redux/api/config'
 
-const Messages = ({ general, user, fetchChats }) => {
+const Messages = ({ general, user, fetchUsers }) => {
     const history = useHistory()
     const [ activeChat, setActiveChat] = useState({})
     const [ chats, setChats] = useState(user?.chatList || [])
+    const [ users, setUsers] = useState(general?.users || [])
+    const [ userData, setUserData] = useState(user?.userData || {})
     const [ processing, setProcessing ] = useState(false)
     const isTab = useMediaQuery({ query: '(max-width: 990px)' })
 
@@ -21,6 +24,8 @@ const Messages = ({ general, user, fetchChats }) => {
         const email = history?.location?.pathname?.split('messages/')?.[1] || ''
         if(email) {
             checkChat(email)
+        } else {
+            setActiveChat({})
         }
     }, [history])
 
@@ -48,33 +53,52 @@ const Messages = ({ general, user, fetchChats }) => {
         return (string.length > 35) ? `${string.substring(0, 35)}...` : string
     }
 
-    const setChatList = async () => {
-        setChats(user.chatList.map(async (chat) => {
-            let part = chat.participants.find((email) => email !== user.userData.email)
-            const usr = await userApi.getUserData(part);
-            return { ...chat, participant: usr.data() }
-
-        }))
-
-    }
-
     useEffect(() => {
         if(activeChat?.participants) {
-            let part = activeChat.participants.find((email) => email !== user.userData.email)
-            let actChat = chats.find((chat) => console.log(chat));
-            setActiveChat(actChat)
-            // chat.participants.indexOf(part) > -1
+            const activeC = chats.find((chat) => chat?.participant?.email === activeChat?.participant?.email)
+            if(activeC) {
+                setActiveChat(activeC)
+            }
         }
     }, [chats])
 
+    const getChats = async (email = '') => {
+        try {
+            setProcessing(true)
+            firebase.firestore().collection(`chats`).where('participants', 'array-contains', email).onSnapshot(snapShot => {
+                const chats = snapShot.docChanges().map((snap) => {
+                    const data = snap.doc.data()
+                    const part = data.participants.find((eml) => eml !== email)
+                    const usr = users.find(({ email }) => email === part ) 
+                    return { ...data, chatId: snap.doc.id, participant: usr }
+                });
+                setChats(chats)
+            });
+        }
+        catch(err) {
+            console.log(err)
+        }
+        finally {
+            setProcessing(false)
+        }
+    }
+
     useEffect(() => {
-        setChatList(user.chatList);
-    }, [user.chatList])
+        getChats(userData?.email);
+    }, [userData, users])
+
+    useEffect(() => {
+        setUserData(user?.userData || {});
+    }, [user.userData])
+
+    useEffect(() => {
+        setUsers(general?.users || []);
+    }, [general.users])
 
     return (
-        <PageContainer logo="dark" processing={processing}>
+        <PageContainer logo="dark" processing={Boolean(users.length === 0 || processing)}>
             <Grid container>
-                <Grid item xs={isTab ? 12 : 4}>
+                { ( !isTab || !activeChat?.participants) && <Grid item xs={isTab ? 12 : 4} className="MuiAppBar-positionSticky" style={{ top: '120px' }}>
                     <List className="chats">
                         {
                             chats.map(({ participant, ...chat }, key) => (
@@ -96,8 +120,9 @@ const Messages = ({ general, user, fetchChats }) => {
                         }
                     </List>
                 </Grid>
-                { !isTab && <Grid item sm={12} md={8}>
-                    <ChatView chat={activeChat} />
+                }
+                { <Grid item xs={12} lg={8} className="MuiAppBar-positionSticky" style={{ top: '120px' }}>
+                    <ChatView chat={activeChat} user={userData?.email} setActiveChat={setActiveChat}/>
                 </Grid> }
             </Grid>
             
@@ -107,6 +132,6 @@ const Messages = ({ general, user, fetchChats }) => {
 const mapStateToProps = ({ general, user }) => ({ general, user })
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators({ fetchChats }, dispatch)
+    return bindActionCreators({ fetchUsers }, dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Messages)

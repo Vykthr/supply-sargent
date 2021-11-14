@@ -16,7 +16,7 @@ const MarketPlace = ({ general, fetchProducts, addToCart, user }) => {
     const [ categories, setCategories ] = useState([])
     const [ products, setProducts ] = useState(general.products)
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
-    const isDesktop = useMediaQuery({ query: '(min-width: 1220px)' })
+    const isDesktop = useMediaQuery({ query: '(min-width: 1300px)' })
     const [ openDialog, setOpenDialog ] = useState(false)
     const [ processing, setProcessing ] = useState(false)
     const [ userData, setUserData ] = useState({})
@@ -91,7 +91,7 @@ const MarketPlace = ({ general, fetchProducts, addToCart, user }) => {
                     </div>
                 </Grid> }
                 
-                <Grid item xs={12} md={9} lg={8} container spacing={2} style={{ paddingTop: isPhone ? 'inherit' : '35px' }}>
+                <Grid item xs={12} md={9} lg={8} container spacing={2} style={{ marginTop: '15px' }}>
                     {
                         products.map((product, key) => (
                             <ProductCard addToCart={addToCart} key={key} product={product} />
@@ -139,7 +139,7 @@ const MarketPlace = ({ general, fetchProducts, addToCart, user }) => {
                     </div>
                 </Grid>
                 
-                { !isDesktop && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar">
+                { isPhone && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar">
                     <div className="section wt-bg">
                         <h4 className="sectionTitle bigger">Do you want to become a vendor?</h4>
                         <Button onClick={() => goto('/become-a-vendor')} className="btn red" color="primary" variant="contained" fullWidth>

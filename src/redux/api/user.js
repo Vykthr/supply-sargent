@@ -32,6 +32,10 @@ export default {
         const res = await firebase.firestore().collection(`permits`).where('user', '==', email).where('expires', '>', today).get()
         return res.docs.map((doc) => doc.data());
     },
+    async getUtilities() {
+        const res = await firebase.firestore().doc(`utilities/general`).get()
+        return res?.data() || {};
+    },
     async purchasePermit(payload) {
         const user = (await this.getUserData(payload.user)).data();
         if(user.balance > payload.price) {
@@ -55,7 +59,7 @@ export default {
         })
     },
 
-    async addMessage(payload) {
+    async newChat(payload) {
         const added = Date.now()
         return firebase.firestore().collection(`chats`).add({
             ...payload, added

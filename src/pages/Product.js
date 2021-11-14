@@ -7,7 +7,7 @@ import { fetchProducts } from '../redux/actions/general';
 import { addToCart } from '../redux/actions/user';
 import { Link, useHistory } from 'react-router-dom'
 import { useMediaQuery } from 'react-responsive'
-import { formatNumber } from '../util'
+import { formatNumber, getDistanceFromLatLonInKm } from '../util'
 import generalApi from '../redux/api/general'
 import userApi from '../redux/api/user'
 import tick from '../assets/images/tick.svg'
@@ -20,9 +20,25 @@ const Product = ({ addToCart, user, general }) => {
     const [ product, setProduct ] = useState({})
     const [ seller, setSeller ] = useState({})
     const isPhone = useMediaQuery({ query: '(max-width: 812px)' })
+    const isDesktop = useMediaQuery({ query: '(min-width: 1220px)' })
     const [ processing, setProcessing ] = useState(false)
     const [ userData, setUserData ] = useState({})
     const [ cartList, setCartList ] = useState(user.cartList)
+    const [ currentLocation, setCurrentLocation ] = useState({})
+
+    const getLocation = () => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((position) => {
+                const location = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                }
+                setCurrentLocation(location);
+            });
+        } else {
+            alert("Geolocation is required to upload a product.");
+        }
+    }
 
     const init = async (slug) => {
         setProcessing(true)
@@ -42,6 +58,10 @@ const Product = ({ addToCart, user, general }) => {
     useEffect(() => {
         setUserData(user?.userData || {});
     }, [user])
+
+    useEffect(() => {
+        getLocation()
+    }, [])
 
     const addToCartList = async (remove = false) => {
         let newCart = [ ...cartList ]
@@ -68,12 +88,17 @@ const Product = ({ addToCart, user, general }) => {
         else history.push('/marketplace')
     }, [history])
 
+    const chat = (email) => {
+        if(Boolean(email !== userData.email)) {
+            history.push(`/messages/${email}`)
+        }
+    }
     
     
     return (
         <PageContainer logo="dark" processing={processing}>
             <Grid container spacing={isPhone ? 0 : 3}>
-                { !isPhone && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar MuiAppBar-positionSticky"style={{ top: '120px' }}>
+                {   isDesktop && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar MuiAppBar-positionSticky"style={{ top: '120px' }}>
                         <div className="section wt-bg">
                             <h4 className="sectionTitle bigger">Do you want to become a vendor?</h4>
                             <Button onClick={() => goto('/become-a-vendor')} className="btn red" color="primary" variant="contained" fullWidth>
@@ -107,7 +132,7 @@ const Product = ({ addToCart, user, general }) => {
                 <Grid item xs={12} md={9} lg={8} container spacing={3}>
                     {
                         Boolean(product?.name) &&
-                        <Grid item xs={12} container className="product-card mt-1 no-padding" style={{ height: 'fit-content' }}>
+                        <Grid item xs={12} container className="product-card mt-1" style={{ height: 'fit-content' }}>
                             <Grid item xs={12} container className="section wt-bg no-padding" alignItems="center" spacing={3}>
                                 <Grid item xs={12} md={7}>
                                     <img style={{ width: '100%' }} src={(product.images.length > 0) ? product.images[0].file : ''} />
@@ -122,11 +147,11 @@ const Product = ({ addToCart, user, general }) => {
                                         <p className="mt-1 mb-1" style={{ fontSize: '50px' }}>${formatNumber(product.price)} <sup style={{ fontSize: '18px' }}>PER {product.value}</sup></p>
                                     </Grid>
 
-                                    <Grid className="icons" item xs={12} container alignItems="center" direction="row" wrap="nowrap">
-                                        <img src={choice} />
-                                        <img src={tick} />
-                                        <img src={tick} />
-                                        <img src={badge} />
+                                    <Grid className="icons"  spacing={1} item xs={12} container alignItems="center" direction="row" wrap="nowrap">
+                                        <Grid item xs={5}><img src={choice} /></Grid>
+                                        <Grid item xs={2}><img src={tick} /></Grid>
+                                        <Grid item xs={2}><img src={tick} /></Grid>
+                                        <Grid item xs={2}><img src={badge} /></Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -142,9 +167,14 @@ const Product = ({ addToCart, user, general }) => {
                                         <Button variant="contained" className="btn green">Curbside</Button>
                                     </Grid>
                                     <Grid item xs={12} className="prod-details">
-                                        <p><span>Location:</span> {product?.location}</p>
+                                        <p><span>Location:</span> {product?.location?.address || `${product?.location?.position?.lat} ${product?.location?.position?.lng}`}</p>
                                         <p><span>Condition:</span> {product?.condition}</p>
-                                        <p><span>Distance:</span> {product?.location}</p>
+                                        {
+                                            Boolean(currentLocation?.lat && currentLocation?.lng) ?
+                                            <p><span>Distance:</span> {getDistanceFromLatLonInKm(currentLocation?.lat, currentLocation?.lng, product?.location?.position?.lat, product?.location?.position?.lng)}</p>
+                                            :
+                                            <p><small>Access to current location denied</small></p>
+                                        }
                                         <p><span>Quantity:</span> {product?.availability} {product.value}</p>
                                     </Grid>
                                 </Grid>
@@ -161,7 +191,7 @@ const Product = ({ addToCart, user, general }) => {
                         Add to cart
                     </Button>
 
-                    <Button className="btn white" color="inherit" variant="contained" fullWidth>
+                    <Button className="btn white" color="inherit" variant="contained" fullWidth onClick={() => chat(product?.seller)}>
                         Message Seller
                     </Button>
 
@@ -194,7 +224,7 @@ const Product = ({ addToCart, user, general }) => {
                     </div>
                 </Grid>
                 
-                { isPhone && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar MuiAppBar-positionSticky" style={{ top: '120px' }}>
+                { !isDesktop && <Grid item xs={12} md={3} lg={2} className="news-feed-side-bar MuiAppBar-positionSticky" style={{ top: '120px' }}>
                     <div className="section wt-bg">
                         <h4 className="sectionTitle bigger">Do you want to become a vendor?</h4>
                         <Button onClick={() => goto('/become-a-vendor')} className="btn red" color="primary" variant="contained" fullWidth>

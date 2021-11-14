@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom'
 
 const ProductCard = ({ product }) => {
     return (
-        <Link to={`/product/${product?.slug || ''}`}>
-            <Grid item xs={12} md={4} container className="product-card">
+        <Grid item xs={12} md={4} container className="product-card">
+            <Link to={`/product/${product?.slug || ''}`}>
                 <Grid item xs={12} container className="section wt-bg">
                     <Grid item xs={12}>
                         <img className="img" src={(product.images.length > 0) ? product.images[0].file : ''} />
@@ -27,8 +27,8 @@ const ProductCard = ({ product }) => {
                         <Grid item xs={2}><img src={badge} /></Grid>
                     </Grid>
                 </Grid>
-            </Grid>
-        </Link>
+            </Link>
+        </Grid>
     )
 }
 

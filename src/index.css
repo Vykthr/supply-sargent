@@ -124,7 +124,7 @@ h6.sectionTitle {
 
 .bg {
     background-image: url('./assets/images/bg.png');
-    min-height: 100vh;
+    min-height: 90vh;
     background-position: center;
     background-attachment: fixed;
     background-size: cover;
@@ -484,6 +484,10 @@ div.form-control {
     margin: .3rem 0;
     border-radius: 20px;
     width: fit-content;
+}
+.message {
+    min-width: 60%;
+    margin: .6rem 0 !important;
 }
 .message.right {
     align-self: flex-end;

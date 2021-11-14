@@ -5,6 +5,7 @@ import AccountComponent from '../../components/account/AccountComponent'
 import { formatNumber } from '../../util'
 import { updateProfile } from '../../redux/actions/user'
 import { bindActionCreators } from 'redux'
+import userApi from '../../redux/api/user'
 
 const Wallet = ({ user, updateProfile }) => {
     const [ userData, setUserData ] = useState(user?.userData || {})
@@ -14,10 +15,11 @@ const Wallet = ({ user, updateProfile }) => {
         setUserData(user?.userData || {})
     }, [user])
 
-    const init = async () => {
+    const init = async (email) => {
         try {
             setProcessing(true)
-            // await updateProfile(userData?.email || '');
+            const res = await userApi.getUserData(email);
+            console.log(res.data())
         }
         catch (err) {
             console.log(err)
@@ -28,8 +30,8 @@ const Wallet = ({ user, updateProfile }) => {
 
 
     useEffect(() => {
-        init()
-    }, [])
+        if(userData?.email) init(userData?.email)
+    }, [userData])
 
     return (
         <AccountComponent section="wallet" processing={processing}>

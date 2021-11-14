@@ -1,15 +1,16 @@
-import { Dialog, DialogActions, DialogContent, FormControl, Grid, TextField, Select, InputLabel, Button, CircularProgress, FormLabel, FormGroup, FormControlLabel, Checkbox } from '@material-ui/core';
+import { Dialog, DialogActions, DialogContent, FormControl, Grid, TextField, Select, InputLabel, Button, CircularProgress, FormLabel, FormGroup, FormControlLabel, Checkbox, IconButton } from '@material-ui/core';
 import React, { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import generalApi from '../redux/api/general';
 import userApi from '../redux/api/user';
-import { AddAPhoto, CameraAlt, DeleteForever } from '@material-ui/icons';
+import { AddAPhoto, CameraAlt, DeleteForever, EditLocation } from '@material-ui/icons';
 import LocationPicker from 'react-location-picker';
 
 const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialog, categories = [], product = {} }) => {
     const [ activePermits, setActivePermits] = useState([])
+    const [ permits, setPermits] = useState([])
     const [ uploading, setUploading ] = useState(false)
-    const [ currentPermits, setCurrentPermits ] = useState([])  
+    const [ showMap, setShowMap ] = useState(false)
     const [ prod, setProd ] = useState({})
     const [ location, setLocation ] = useState( {
         address: "",
@@ -49,7 +50,9 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
         try {
             setProcessing(true)
             const res = await userApi.getActivePermits(user)
+            const utilities = await userApi.getUtilities()
             setActivePermits(res)
+            setPermits(utilities?.permits || [])
         }
         catch (err) {
             console.log(err)
@@ -91,9 +94,13 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
         const expires = categories?.find(({ id }) => id === prod.permitId)?.expires || ''
         try {
             setUploading(true)
-            if (prod.name && prod.images.length > 0 && prod.condition && prod.availability && prod.categories.length > 0 && prod.location && prod.permitId && prod.price && prod.value ) {
+            if(!location?.position?.lat || !location?.position?.lng) {
+                getLocation();
+            }
+            if (prod.name && prod.images.length > 0 && prod.condition && prod.availability && prod.categories.length > 0 && location?.position?.lat && location?.position?.lng && prod.permitId && prod.price && prod.value ) {
                 const payload = {
                     ...prod,
+                    location,
                     seller: user,
                     expires
                 }
@@ -101,7 +108,6 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
                     await generalApi.editProduct(prod.id, payload);
                 }
                 else {
-                    console.log('new')
                     await generalApi.addProduct(payload);
 
                 }                
@@ -142,7 +148,7 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
                 handleLocationChange(location);
             });
         } else {
-          alert("Geolocation is not supported by this browser.");
+            alert("Geolocation is required to upload a product.");
         }
     }
 
@@ -169,6 +175,7 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
                     (freeTrial || Boolean(activePermits.find((active) => active?.id !== 1))) ?
                     <div>
                         <h2 className="pageTitle">{ isEdit ? 'Edit Product' : 'New Product' }</h2>
+                        { freeTrial && <small style={{ display: 'block', textAlign: 'center' }}>You are on a free 3 months trial </small> }
                         <Grid container className="product-form">
                             <Grid item xs={12}>
                                 <FormControl className="form-control">
@@ -237,30 +244,33 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
                             </Grid>
 
                             
-                            <Grid item xs={12} md={6}>
+                            <Grid item xs={12}>
                                 <FormControl variant="outlined" className="form-control">
-                                    <InputLabel>Product Location</InputLabel>
-                                    <Select
-                                        value={prod.location}
-                                        name="location"
-                                        onChange={(e) => handleFormChange(e.target) }
-                                        native
+                                    <TextField 
+                                        variant="outlined"
+                                        style={{ marginRight: 0 }}
+                                        value={location?.address || `${location?.position?.lat} ${location?.position?.lng}`} readonly
                                         label="Product Location"
-                                    >
-                                        <option value={null}>Select Location</option>
-                                        <option value="tridad">Tridad</option>
-                                    </Select>
+                                        placeholder="Enter product location"
+                                        InputProps={{
+                                            endAdornment: (
+                                                <IconButton variant="contained" color="primary" onClick={() => setShowMap(!showMap)}>
+                                                    <EditLocation />
+                                                </IconButton>
+                                            )
+                                        }}
+                                    />
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={12}>
+                            { showMap && <Grid item xs={12}>
                                 <LocationPicker
                                     containerElement={ <div style={ {height: '100%'} } /> }
                                     mapElement={ <div style={ {height: '400px'} } /> }
                                     defaultPosition={location.position}
                                     onChange={handleLocationChange}
                                 />
-                            </Grid>
+                            </Grid> }
 
                             <Grid item xs={12} md={6}>
                                 <FormControl variant="outlined" className="form-control">
@@ -292,6 +302,11 @@ const AddProduct = ({ open = false, user = null, freeTrial = false, setOpenDialo
                                     >
                                         <option value={null}>Select permit category</option>
                                         {
+                                            freeTrial ?
+                                            permits.map((permit, key) => (
+                                                permit.id !== 1 && <option key={key} value={permit.id}>{permit.name}</option>
+                                            ))
+                                            :
                                             activePermits.map((permit, key) => (
                                                 permit.id !== 1 && <option key={key} value={permit.id}>{permit.name}</option>
                                             ))

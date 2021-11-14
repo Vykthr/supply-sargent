@@ -12,14 +12,18 @@ const Cart = ({ user, addToCart }) => {
 
     useEffect(() => {
         setCartList(user.cartList)
-    }, [user])
+    }, [user.cartList])
+
+    const getSubTotal = (items) => {
+        return items.map(({ price, quantity }) => price * quantity).reduce((sum, i) => sum + i, 0);
+      }
 
     return (
         <AccountComponent section="cart">
             
-            <TableContainer>
-                <Table>
-                    <TableHead stickyHeader >
+            <TableContainer style={{ height: '500px' }}>
+                <Table stickyHeader>
+                    <TableHead >
                         <TableRow>
                             <TableCell align="center">S/N</TableCell>
                             <TableCell align="center">Product Image</TableCell>
@@ -61,6 +65,20 @@ const Cart = ({ user, addToCart }) => {
                                 </TableRow>
                             ))
                         }
+
+                        <TableRow>
+                            <TableCell rowSpan={4} />
+                            <TableCell colSpan={2}>Subtotal</TableCell>
+                            <TableCell align="right">${getSubTotal(cartList)}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell colSpan={2}>Delivery Fee</TableCell>
+                            <TableCell align="right">$100</TableCell>
+                        </TableRow>
+                        <TableRow>
+                            <TableCell colSpan={2}>Total</TableCell>
+                            <TableCell align="right">$100</TableCell>
+                        </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
